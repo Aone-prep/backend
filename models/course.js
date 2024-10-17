@@ -11,6 +11,10 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Course.belongsTo(models.CourseCategory, {
+        foreignKey: 'category_id', // Foreign key in the Course table
+        as: 'category' // Alias for the association
+      });
     }
   }
   Course.init({
@@ -19,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
     duration: DataTypes.TIME,
     level: DataTypes.STRING,
     category_id: DataTypes.INTEGER,
-    user_id: DataTypes.INTEGER
+    // user_id: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'Course',

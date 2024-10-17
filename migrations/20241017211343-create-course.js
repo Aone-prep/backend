@@ -22,18 +22,27 @@ module.exports = {
         type: Sequelize.STRING
       },
       category_id: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull: false, // Make sure this is required
+        references: {
+          model: 'CourseCategories', // Name of the table you're referencing
+          key: 'id' // The key in the CourseCategory table
+        },
+        onUpdate: 'CASCADE', // Optional: Define behavior on update
+        onDelete: 'SET NULL' // Optional: Define behavior on delete
       },
-      user_id: {
-        type: Sequelize.INTEGER
-      },
+      // user_id: {
+      //   type: Sequelize.INTEGER
+      // },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       }
     });
   },
