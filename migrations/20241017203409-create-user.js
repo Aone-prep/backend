@@ -26,7 +26,7 @@ module.exports = {
       },
       role: {
         type: Sequelize.STRING,
-        defaultValue:Sequelize.literal('user') 
+        defaultValue:'user'
       },
       status: {
         type: Sequelize.BOOLEAN
