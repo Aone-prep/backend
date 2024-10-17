@@ -1,6 +1,6 @@
 // Import the http module
 const http = require('http');
-const db = require('./database');
+const db = require('./models/index');
 
 // Create an HTTP server
 const server = http.createServer((req, res) => {
@@ -9,6 +9,8 @@ const server = http.createServer((req, res) => {
     res.end('Hello, World!\n'); // Send the response
 });
 
+// Sync database
+db.sequelize.sync();
 // Define the port number
 const PORT = 3030;
 
