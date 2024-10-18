@@ -2,35 +2,38 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Users', {
+    await queryInterface.createTable('Courses', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      first_name: {
+      course_name: {
         type: Sequelize.STRING
       },
-      last_name: {
+      description: {
         type: Sequelize.STRING
       },
-      username: {
+      duration: {
+        type: Sequelize.TIME
+      },
+      level: {
         type: Sequelize.STRING
       },
-      email: {
-        type: Sequelize.STRING
+      category_id: {
+        type: Sequelize.INTEGER,
+        allowNull: false, // Make sure this is required
+        references: {
+          model: 'CourseCategories', // Name of the table you're referencing
+          key: 'id' // The key in the CourseCategory table
+        },
+        onUpdate: 'CASCADE', // Optional: Define behavior on update
+        onDelete: 'SET NULL' // Optional: Define behavior on delete
       },
-      password: {
-        type: Sequelize.STRING
-      },
-      role: {
-        type: Sequelize.STRING,
-        defaultValue:'user'
-      },
-      status: {
-        type: Sequelize.BOOLEAN
-      },
+      // user_id: {
+      //   type: Sequelize.INTEGER
+      // },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
@@ -44,6 +47,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Users');
+    await queryInterface.dropTable('Courses');
   }
 };
