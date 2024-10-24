@@ -121,6 +121,12 @@
 const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/userController');
+const questionController = require('../controllers/questionController');
+const usertestController = require('../controllers/usertestController');
+const resultController = require('../controllers/resultController');
+const mocktestController = require('../controllers/mocktestController');
+const courseController = require('../controllers/courseController');
+const courseCategoryController = require('../controllers/courseCategoryController');
 const authMiddleware = require('../middlewares/authMiddleware');
 const adminMiddleware = require('../middlewares/adminMiddleware');
 
@@ -138,5 +144,47 @@ router.delete('/user', authMiddleware, userController.deleteUser);
 // Admin Routes (Protected, Admin Only)
 router.get('/admin/users', [authMiddleware, adminMiddleware], userController.getAllUsers);
 router.delete('/admin/user/:id', [authMiddleware, adminMiddleware], userController.deleteAnyUser);
+
+// Question Routes
+router.get('/questions', questionController.getAllQuestions);
+router.get('/questions/:id', questionController.getQuestionById);
+router.post('/questions', authMiddleware, questionController.createQuestion);
+router.put('/questions/:id', authMiddleware, questionController.updateQuestion);
+router.delete('/questions/:id', authMiddleware, questionController.deleteQuestion);
+
+// User Test Routes
+router.get('/usertests', authMiddleware, usertestController.getAllUserTests);
+router.get('/usertests/:id', authMiddleware, usertestController.getUserTestById);
+router.post('/usertests', authMiddleware, usertestController.createUserTest);
+router.put('/usertests/:id', authMiddleware, usertestController.updateUserTest);
+router.delete('/usertests/:id', authMiddleware, usertestController.deleteUserTest);
+
+// Result Routes
+router.get('/results', resultController.getAllResults);
+router.get('/results/:id', resultController.getResultById);
+router.post('/results', authMiddleware, resultController.createResult);
+router.put('/results/:id', authMiddleware, resultController.updateResult);
+router.delete('/results/:id', authMiddleware, resultController.deleteResult);
+
+// Mock Test Routes
+router.get('/mocktests', mocktestController.getAllMockTests);
+router.get('/mocktests/:id', mocktestController.getMockTestById);
+router.post('/mocktests', authMiddleware, mocktestController.createMockTest);
+router.put('/mocktests/:id', authMiddleware, mocktestController.updateMockTest);
+router.delete('/mocktests/:id', authMiddleware, mocktestController.deleteMockTest);
+
+// Course Routes
+router.get('/courses', courseController.getAllCourses);
+router.get('/courses/:id', courseController.getCourseById);
+router.post('/courses', authMiddleware, courseController.createCourse);
+router.put('/courses/:id', authMiddleware, courseController.updateCourse);
+router.delete('/courses/:id', authMiddleware, courseController.deleteCourse);
+
+// Course Category Routes
+router.get('/categories', courseCategoryController.getAllCategories);
+router.get('/categories/:id', courseCategoryController.getCategoryById);
+router.post('/categories', authMiddleware, courseCategoryController.createCategory);
+router.put('/categories/:id', authMiddleware, courseCategoryController.updateCategory);
+router.delete('/categories/:id', authMiddleware, courseCategoryController.deleteCategory);
 
 module.exports = router;
