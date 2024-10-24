@@ -28,6 +28,10 @@ module.exports = {
         type: Sequelize.STRING,
         defaultValue:'user'
       },
+      created_by: {
+        type: Sequelize.STRING,
+        allowNull:false
+      },
       status: {
         type: Sequelize.BOOLEAN
       },

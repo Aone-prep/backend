@@ -14,7 +14,8 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   CourseCategory.init({
-    category_name: DataTypes.STRING
+    category_name: DataTypes.STRING,
+    status: DataTypes.BOOLEAN
   }, {
     sequelize,
     modelName: 'CourseCategory',

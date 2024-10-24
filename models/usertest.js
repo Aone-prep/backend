@@ -10,13 +10,27 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      UserTest.belongsTo(models.Course, {
+        foreignKey: 'course_id',
+        onDelete: 'CASCADE'
+      });
+
+      UserTest.belongsTo(models.Users, {
+        foreignKey: 'user_id',
+        onDelete: 'CASCADE'
+      });
+
+      UserTest.belongsTo(models.MockTests, {
+        foreignKey: 'mocktest_id',
+        onDelete: 'CASCADE'
+      });
     }
   }
   UserTest.init({
     course_id: DataTypes.INTEGER,
     user_id: DataTypes.INTEGER,
-    mocktest_id: DataTypes.INTEGER
+    mocktest_id: DataTypes.INTEGER,
+    course_id: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'UserTest',
