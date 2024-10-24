@@ -10,7 +10,12 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      Result.belongsTo(models.MockTest, {
+        foreignKey: 'result_id', // Foreign key in Result table linking to MockTest
+        as: 'mockTest',          // Alias for accessing the associated MockTest
+        onDelete: 'CASCADE'  // Optional: cascade delete of result when MockTest is deleted
+            
+      });
     }
   }
   Result.init({

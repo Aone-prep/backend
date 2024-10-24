@@ -28,12 +28,9 @@ module.exports = {
           model: 'CourseCategories', // Name of the table you're referencing
           key: 'id' // The key in the CourseCategory table
         },
-        onUpdate: 'CASCADE', // Optional: Define behavior on update
-        onDelete: 'SET NULL' // Optional: Define behavior on delete
+        onDelete: 'CASCADE' // Optional: Define behavior on delete
       },
-      // user_id: {
-      //   type: Sequelize.INTEGER
-      // },
+    
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

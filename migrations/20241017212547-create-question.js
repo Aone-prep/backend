@@ -27,8 +27,22 @@ module.exports = {
       answer: {
         type: Sequelize.STRING
       },
-      mocktest_id: {
-        type: Sequelize.INTEGER
+      mock_test_id: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references:{
+          model: 'MockTests',
+          key: 'id',
+        },
+        onDelete: 'CASCADE'
+      },
+      created_by: {
+        type: Sequelize.STRING,
+        allowNull:false,
+        default:'admin'
+      },
+      status: {
+        type: Sequelize.BOOLEAN
       },
       createdAt: {
         allowNull: false,

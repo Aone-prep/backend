@@ -10,7 +10,11 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      MockTest.hasOne(models.Result, {
+        foreignKey: 'result_id',  // Add foreignKey in the Result table
+        as: 'result',              // Alias for accessing the associated Result
+        onDelete: 'CASCADE',       // Optional: cascade deletion of the Result if MockTest is deleted
+      });
     }
   }
   MockTest.init({
@@ -18,7 +22,8 @@ module.exports = (sequelize, DataTypes) => {
     description: DataTypes.STRING,
     duration: DataTypes.TIME,
     status: DataTypes.BOOLEAN,
-    max_score: DataTypes.INTEGER
+    max_score: DataTypes.INTEGER,
+    result_id: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'MockTest',
