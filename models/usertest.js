@@ -15,12 +15,12 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: 'CASCADE'
       });
 
-      UserTest.belongsTo(models.Users, {
+      UserTest.belongsTo(models.User, {
         foreignKey: 'user_id',
         onDelete: 'CASCADE'
       });
 
-      UserTest.belongsTo(models.MockTests, {
+      UserTest.belongsTo(models.MockTest, {
         foreignKey: 'mocktest_id',
         onDelete: 'CASCADE'
       });
