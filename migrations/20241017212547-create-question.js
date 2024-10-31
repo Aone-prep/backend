@@ -36,6 +36,15 @@ module.exports = {
         },
         onDelete: 'CASCADE'
       },
+      question_type_id: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references:{
+          model: 'QuestionTypes',
+          key: 'id',
+        },
+        onDelete: 'CASCADE'
+      },
       created_by: {
         type: Sequelize.STRING,
         allowNull:false,
