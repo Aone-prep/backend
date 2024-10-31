@@ -11,8 +11,12 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Question.belongsTo(models.QuestionType, {
+        foreignKey: 'questiontype_id', // Foreign key in Question model
+        as: 'questionType' // Alias for the association
+      });
     }
-  }
+    }
   Question.init({
     description: DataTypes.STRING,
     optionA: DataTypes.STRING,
@@ -22,7 +26,8 @@ module.exports = (sequelize, DataTypes) => {
     answer: DataTypes.STRING,
     created_by: DataTypes.STRING,
     status: DataTypes.BOOLEAN,
-    mocktest_id: DataTypes.INTEGER
+    mocktest_id: DataTypes.INTEGER,
+    questiontype_id: DataTypes.INTEGER,
   }, {
     sequelize,
     modelName: 'Question',
