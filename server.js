@@ -48,7 +48,7 @@ app.use('/admin',adminRoute);
 
 // Catch-all route for unhandled requests
 app.use((req, res) => {
-    res.status(404).json({ message: 'Endpoint not found' });
+    res.status(404).json({ message: 'URL not found' });
 });
 
 // Sync Database and Start Server
