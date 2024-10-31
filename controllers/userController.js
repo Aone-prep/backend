@@ -9,6 +9,7 @@ exports.welcomeMessage = (req, res) => {
 
 // Register User
 exports.registerUser = async (req, res) => {
+    
     const { first_name, last_name, username, email, password } = req.body;
     try {
         const hashedPassword = await bcrypt.hash(password, 10);

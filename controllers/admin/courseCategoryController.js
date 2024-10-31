@@ -1,4 +1,4 @@
-const { CourseCategory } = require('../models');
+const { CourseCategory } = require('../../models');
 
 // Get all course categories
 exports.getAllCourseCategories = async (req, res) => {

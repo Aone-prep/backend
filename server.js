@@ -30,8 +30,11 @@
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const userRoutes = require('./routes/userRoutes');
 const db = require('./models/index');
+const userRoute = require('./routes/user/userRoutes')
+const adminRoute = require('./routes/admin/adminRoutes')
+
+// const roleRoute = require('./roleRoutes')
 
 const app = express();
 
@@ -40,7 +43,8 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // User routes
-app.use('/api', userRoutes);
+app.use('/user',userRoute);
+app.use('/admin',adminRoute);
 
 // Catch-all route for unhandled requests
 app.use((req, res) => {

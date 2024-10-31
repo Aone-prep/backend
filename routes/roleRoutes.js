@@ -125,16 +125,21 @@ const questionController = require('../controllers/questionsController');
 const usertestController = require('../controllers/usertestController');
 const resultController = require('../controllers/resultController');
 const mocktestController = require('../controllers/mocktestController');
+const courseController = require('../controllers/admin/courseController');
+const courseCategoryController = require('../controllers/admin/courseCategoryController');
 const authMiddleware = require('../middlewares/authMiddleware');
 const adminMiddleware = require('../middlewares/adminMiddleware');
-
-
 
 // Public Routes
 router.get('/', userController.welcomeMessage);
 router.post('/register', userController.registerUser);
 router.post('/login', userController.loginUser);
 
+// Protected Routes (User)
+router.get('/user', authMiddleware, userController.getUserInfo);
+router.put('/user', authMiddleware, userController.updateUserInfo);
+router.post('/user/reset-password', authMiddleware, userController.resetPassword);
+router.delete('/user', authMiddleware, userController.deleteUser);
 
 // Admin Routes (Protected, Admin Only)
 router.get('/admin/users', [authMiddleware, adminMiddleware], userController.getAllUsers);
@@ -168,5 +173,18 @@ router.post('/mocktests', authMiddleware, mocktestController.createMockTest);
 router.put('/mocktests/:id', authMiddleware, mocktestController.updateMockTest);
 router.delete('/mocktests/:id', authMiddleware, mocktestController.deleteMockTest);
 
+// Course Routes
+router.get('/courses', courseController.getAllCourses);
+router.get('/courses/:id', courseController.getCourseById);
+router.post('/courses', authMiddleware, courseController.createCourse);
+router.put('/courses/:id', authMiddleware, courseController.updateCourse);
+router.delete('/courses/:id', authMiddleware, courseController.deleteCourse);
+
+// Course Category Routes
+// router.get('/categories', courseCategoryController.getAllCategories);
+// router.get('/categories/:id', courseCategoryController.getCategoryById);
+// router.post('/categories', authMiddleware, courseCategoryController.createCategory);
+// router.put('/categories/:id', authMiddleware, courseCategoryController.updateCategory);
+// router.delete('/categories/:id', authMiddleware, courseCategoryController.deleteCategory);
 
 module.exports = router;
