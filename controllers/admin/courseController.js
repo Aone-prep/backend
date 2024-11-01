@@ -1,9 +1,17 @@
-const { Course } = require('../../models');
+const {CourseCategory, Course } = require('../../models');
 
 // Get all courses
 exports.getAllCourses = async (req, res) => {
+    
     try {
-        const courses = await Course.findAll();
+        const courses = await Course.findAll(
+            {
+            include: [{
+                model:CourseCategory,
+                as: 'category'
+            }]
+
+    });
         res.json(courses);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -12,8 +20,18 @@ exports.getAllCourses = async (req, res) => {
 
 // Get course by ID
 exports.getCourseById = async (req, res) => {
+    const course_id = req.params.id;
     try {
-        const course = await Course.findByPk(req.params.id);
+        const course = await Course.findOne(
+            {
+                where: { id: course_id },
+                include: [{
+                    model: CourseCategory,
+                    as: 'category'
+                }]
+            }
+            );
+        
         if (!course) return res.status(404).json({ message: 'Course not found' });
         res.json(course);
     } catch (error) {

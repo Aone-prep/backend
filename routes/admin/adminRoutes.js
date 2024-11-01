@@ -23,7 +23,7 @@ router.delete('/categories/:id', adminMiddleware, courseCategoryController.delet
 // Course Routes
 router.get('/courses', adminMiddleware, courseController.getAllCourses);
 router.get('/courses/:id', adminMiddleware,courseController.getCourseById);
-router.post('/courses', adminMiddleware, courseController.createCourse);
+router.post('/add-courses', adminMiddleware, courseController.createCourse);
 router.put('/courses/:id', adminMiddleware, courseController.updateCourse);
 router.delete('/courses/:id', adminMiddleware, courseController.deleteCourse);
  module.exports=router;
