@@ -1,4 +1,4 @@
-const { Question } = require('../models');
+const { Question } = require('../../models');
 
 // Get all questions
 exports.getAllQuestions = async (req, res) => {
