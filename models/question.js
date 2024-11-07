@@ -15,6 +15,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'questiontype_id', // Foreign key in Question model
         as: 'questionType' // Alias for the association
       });
+      Question.belongsTo(models.MockTest, {
+        foreignKey: 'mocktest_id', // Foreign key in Question model
+        as: 'mockTest' // Alias for the association
+      });
     }
     }
   Question.init({

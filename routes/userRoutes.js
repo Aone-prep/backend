@@ -161,12 +161,6 @@ router.post('/results', authMiddleware, resultController.createResult);
 router.put('/results/:id', authMiddleware, resultController.updateResult);
 router.delete('/results/:id', authMiddleware, resultController.deleteResult);
 
-// Mock Test Routes
-router.get('/mocktests', mocktestController.getAllMockTests);
-router.get('/mocktests/:id', mocktestController.getMockTestById);
-router.post('/mocktests', authMiddleware, mocktestController.createMockTest);
-router.put('/mocktests/:id', authMiddleware, mocktestController.updateMockTest);
-router.delete('/mocktests/:id', authMiddleware, mocktestController.deleteMockTest);
 
 
 module.exports = router;
