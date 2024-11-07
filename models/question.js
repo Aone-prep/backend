@@ -12,11 +12,11 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       Question.belongsTo(models.QuestionType, {
-        foreignKey: 'questiontype_id', // Foreign key in Question model
+        foreignKey: 'question_type_id', // Foreign key in Question model
         as: 'questionType' // Alias for the association
       });
       Question.belongsTo(models.MockTest, {
-        foreignKey: 'mocktest_id', // Foreign key in Question model
+        foreignKey: 'mock_test_id', // Foreign key in Question model
         as: 'mockTest' // Alias for the association
       });
     }
@@ -30,8 +30,8 @@ module.exports = (sequelize, DataTypes) => {
     answer: DataTypes.STRING,
     created_by: DataTypes.STRING,
     status: DataTypes.BOOLEAN,
-    mocktest_id: DataTypes.INTEGER,
-    questiontype_id: DataTypes.INTEGER,
+    mock_test_id: DataTypes.INTEGER,
+    question_type_id: DataTypes.INTEGER,
   }, {
     sequelize,
     modelName: 'Question',

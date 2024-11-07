@@ -1,9 +1,22 @@
-const { Question } = require('../../models');
+const { Question,MockTest,QuestionType } = require('../../models');
 
 // Get all questions
 exports.getAllQuestions = async (req, res) => {
     try {
-        const questions = await Question.findAll();
+        const questions = await Question.findAll(
+            {
+                include: [
+                    {
+                        model: MockTest,
+                        as: 'mockTest'  // Ensure the alias is correct
+                    },
+                    {
+                        model: QuestionType,
+                        as: 'questionType'  // Ensure the alias is correct
+                    }
+                ]
+        }
+        );
         res.json(questions);
     } catch (error) {
         res.status(400).json({ message: error.message });
@@ -14,7 +27,22 @@ exports.getAllQuestions = async (req, res) => {
 exports.getQuestionById = async (req, res) => {
     const { id } = req.params;
     try {
-        const question = await Question.findByPk(id);
+        const question = await Question.findOne(
+            {
+                where: { id: id },
+                include: [
+                    {
+                        model: MockTest,
+                        as: 'mockTest'  
+                    },
+                    {
+                        model: QuestionType,
+                        as: 'questionType'
+                    }
+                ]
+            }
+        
+        );
         if (!question) return res.status(404).json({ message: 'Question not found' });
         res.json(question);
     } catch (error) {
@@ -24,10 +52,12 @@ exports.getQuestionById = async (req, res) => {
 
 // Create a new question
 exports.createQuestion = async (req, res) => {
-    const { description, optionA, optionB, optionC, optionD, answer, mock_test_id, status } = req.body;
+    const { description, optionA, optionB, optionC, optionD, answer, mock_test_id,question_type_id, status } = req.body;
     try {
-        const question = await Question.create({ description, optionA, optionB, optionC, optionD, answer, mock_test_id, status });
-        res.status(201).json(question);
+        created_by="Admin";
+        const question = await Question.create({ description, optionA, optionB, optionC, optionD, answer, mock_test_id, question_type_id,status,created_by });
+        res.json({ message: 'Question Added Successfully' });
+        // res.status(201).json(question);
     } catch (error) {
         res.status(400).json({ message: error.message });
     }

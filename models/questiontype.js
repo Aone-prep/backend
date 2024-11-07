@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       QuestionType.hasOne(models.Question, {
-        foreignKey: 'questiontype_id', // foreign key in Question model
+        foreignKey: 'question_type_id', // foreign key in Question model
         as: 'question' // alias for association
       });
     }

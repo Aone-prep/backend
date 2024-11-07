@@ -6,10 +6,18 @@ const courseController= require('../../controllers/admin/courseController');
 const adminController = require('../../controllers/admin/adminController');
 const QuestionTypecontroller = require('../../controllers/admin/questionTypecontroller');
 const mocktestController = require('../../controllers/admin/mocktestController');
-
+const questionController = require('../../controllers/admin/questionsController');
 
 //getting token
 router.post('/login', adminController.loginAdmin);
+
+
+// Question Routes
+router.get('/questions',  adminMiddleware,questionController.getAllQuestions);
+router.get('/questions/:id', adminMiddleware, questionController.getQuestionById);
+router.post('/add-questions',  adminMiddleware, questionController.createQuestion);
+router.put('/questions/:id',  adminMiddleware, questionController.updateQuestion);
+router.delete('/questions/:id',  adminMiddleware, questionController.deleteQuestion);
 
 // Mock Test Routes
 router.get('/mocktests', adminMiddleware,mocktestController.getAllMockTests);

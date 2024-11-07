@@ -16,8 +16,8 @@ module.exports = (sequelize, DataTypes) => {
       //   onDelete: 'CASCADE',       // Optional: cascade deletion of the Result if MockTest is deleted
       // });
       MockTest.hasOne(models.Question, {
-        foreignKey: 'mocktest_id', // foreign key in Question model
-        as: 'question' // alias for association
+        foreignKey: 'mock_test_id', // foreign key in Question model
+        as: 'mockTest' // alias for association
       });
     }
   }

@@ -140,12 +140,7 @@ router.post('/login', userController.loginUser);
 router.get('/admin/users', [authMiddleware, adminMiddleware], userController.getAllUsers);
 router.delete('/admin/user/:id', [authMiddleware, adminMiddleware], userController.deleteAnyUser);
 
-// Question Routes
-router.get('/questions', questionController.getAllQuestions);
-router.get('/questions/:id', questionController.getQuestionById);
-router.post('/questions', authMiddleware, questionController.createQuestion);
-router.put('/questions/:id', authMiddleware, questionController.updateQuestion);
-router.delete('/questions/:id', authMiddleware, questionController.deleteQuestion);
+
 
 // User Test Routes
 router.get('/usertests', authMiddleware, usertestController.getAllUserTests);
