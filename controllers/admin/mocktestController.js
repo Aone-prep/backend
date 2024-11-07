@@ -1,4 +1,4 @@
-const { MockTest } = require('../models');
+const { MockTest } = require('../../models');
 
 // Get all mock tests
 exports.getAllMockTests = async (req, res) => {
@@ -24,10 +24,10 @@ exports.getMockTestById = async (req, res) => {
 
 // Create a new mock test
 exports.createMockTest = async (req, res) => {
-    const { name, description, duration, max_score, result_id, status } = req.body;
+    const { name, description, duration, max_score, status } = req.body;
     try {
-        const mockTest = await MockTest.create({ name, description, duration, max_score, result_id, status });
-        res.status(201).json(mockTest);
+        const mockTest = await MockTest.create({ name, description, duration, max_score, status });
+        res.json({ message: 'Mock Test Added Successfully'});
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
@@ -49,11 +49,12 @@ exports.updateMockTest = async (req, res) => {
 
 // Delete mock test by ID
 exports.deleteMockTest = async (req, res) => {
+
     const { id } = req.params;
     try {
-        const mocktest = await Mocktest.findByPk(id);
-        if (!mocktest) return res.status(404).json({ message: 'Mock test not found' });
-        await mocktest.destroy();
+        const mockTest = await MockTest.findByPk(id);
+        if (!mockTest) return res.status(404).json({ message: 'Mock test not found' });
+        await mockTest.destroy();
         res.json({ message: 'Mock test deleted successfully' });
     } catch (error) {
         res.status(500).json({ message: error.message });
