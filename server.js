@@ -46,6 +46,7 @@ app.use(bodyParser.json());
 app.use('/user',userRoute);
 app.use('/admin',adminRoute);
 
+
 // Catch-all route for unhandled requests
 app.use((req, res) => {
     res.status(404).json({ message: 'URL not found' });
