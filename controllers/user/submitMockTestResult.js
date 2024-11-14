@@ -30,7 +30,7 @@ exports.submitMockTestResult = async (req, res) => {
         });
 
         res.json({
-            message: 'Mock Test submitted successfully',
+            message: 'Mock Test submitted successfully and result saved',
             score,
             resultId: mockTestResult.id,
         });
