@@ -24,15 +24,15 @@ module.exports = {
       max_score: {
         type: Sequelize.INTEGER
       },
-      // result_id: {
-      //   type: Sequelize.INTEGER,
-      //   allowNull: false,
-      //   references:{
-      //     model:'Results',
-      //     key: 'id',
-      //   },
-      //   onDelete: 'CASCADE' 
-      // },
+      course_id: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'Courses', // Table name of Course
+          key: 'id'
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE'
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

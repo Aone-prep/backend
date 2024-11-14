@@ -19,6 +19,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'mock_test_id', // foreign key in Question model
         as: 'mockTest' // alias for association
       });
+      MockTest.belongsTo(models.Course, {
+        foreignKey: 'course_id',
+        as: 'course'
+      });
     }
   }
   MockTest.init({
@@ -27,6 +31,7 @@ module.exports = (sequelize, DataTypes) => {
     duration: DataTypes.TIME,
     status: DataTypes.BOOLEAN,
     max_score: DataTypes.INTEGER,
+    course_id: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'MockTest',

@@ -13,41 +13,36 @@ router.post('/login', adminController.loginAdmin);
 
 
 // Question Routes
-router.get('/questions',  adminMiddleware,questionController.getAllQuestions);
-router.get('/questions/:id', adminMiddleware, questionController.getQuestionById);
-router.post('/add-questions',  adminMiddleware, questionController.createQuestion);
+
+router.post('/questions',  adminMiddleware, questionController.createQuestion);
 router.put('/questions/:id',  adminMiddleware, questionController.updateQuestion);
 router.delete('/questions/:id',  adminMiddleware, questionController.deleteQuestion);
 
 // Mock Test Routes
-router.get('/mocktests', adminMiddleware,mocktestController.getAllMockTests);
-router.get('/mocktests/:id', adminMiddleware,mocktestController.getMockTestById);
-router.post('/add-mocktests', adminMiddleware, mocktestController.createMockTest);
+
+router.post('/mocktests', adminMiddleware, mocktestController.createMockTest);
 router.put('/mocktests/:id', adminMiddleware, mocktestController.updateMockTest);
 router.delete('/mocktests/:id', adminMiddleware, mocktestController.deleteMockTest);
 
 
 // Question Type Routes 
-router.get ('/questionType',adminMiddleware, QuestionTypecontroller.getAllQuestionType);
-router.get ('/questionType/:id',adminMiddleware, QuestionTypecontroller.getQuestionTypeById);
-router.post ('/add-questionType',adminMiddleware, QuestionTypecontroller.createQuestionType);
+
+router.post ('/questionType',adminMiddleware, QuestionTypecontroller.createQuestionType);
 router.put ('/questionType/:id',adminMiddleware, QuestionTypecontroller.updateQuestionType);
 router.delete ('/questionType/:id',adminMiddleware, QuestionTypecontroller.deleteQuestionType);
 
 
 
 // Course Category Routes
-router.get('/categories', adminMiddleware, courseCategoryController.getAllCourseCategories);
-router.get('/categories/:id', adminMiddleware,courseCategoryController.getCourseCategoryById);
-router.post('/add-categories', adminMiddleware, courseCategoryController.createCourseCategory);
+
+router.post('/categories', adminMiddleware, courseCategoryController.createCourseCategory);
 router.put('/categories/:id', adminMiddleware, courseCategoryController.updateCourseCategory);
 router.delete('/categories/:id', adminMiddleware, courseCategoryController.deleteCourseCategory);
 
 
 // Course Routes
-router.get('/courses', adminMiddleware, courseController.getAllCourses);
-router.get('/courses/:id', adminMiddleware,courseController.getCourseById);
-router.post('/add-courses', adminMiddleware, courseController.createCourse);
+
+router.post('/courses', adminMiddleware, courseController.createCourse);
 router.put('/courses/:id', adminMiddleware, courseController.updateCourse);
 router.delete('/courses/:id', adminMiddleware, courseController.deleteCourse);
 module.exports=router;
