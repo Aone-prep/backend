@@ -13,6 +13,7 @@ env:
 permissions:
   contents: read
   actions: write    # This is required to trigger other workflows
+  id-token: write
 
 jobs:
   build-and-push:
