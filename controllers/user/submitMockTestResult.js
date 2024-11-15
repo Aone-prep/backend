@@ -1,40 +1,58 @@
-const { MockTest, Question, MockTestResult } = require('../../models');
+const { UserTest, Question, MockTest, Result } = require('../../models');
 
-// Submit the answer for a mock test
+// Submit the result for a mock test
 exports.submitMockTestResult = async (req, res) => {
-    const { userId, mockTestId, selectedOption } = req.body; // `selectedOption` is the user’s answer for the question
-    let score = 0;
+    const { userId, mockTestId, answers } = req.body; // answers is an array of user answers
 
     try {
-        // Fetch the mock test along with its single associated question
-        const mockTest = await MockTest.findByPk(mockTestId, {
-            include: [{ model: Question, as: 'question' }]
+        // Fetch all the questions related to the mock test
+        const questions = await Question.findAll({
+            where: { mock_test_id: mockTestId },
+            include: [{ model: MockTest, as: 'mockTest' }] // MockTest is related
         });
 
-        if (!mockTest || !mockTest.question) {
-            return res.status(404).json({ message: 'Mock Test or Question not found' });
+        if (questions.length === 0) {
+            return res.status(404).json({ message: 'No questions found for this mock test' });
         }
 
-        // Check if the selected option matches the correct answer
-        if (mockTest.question.answer === selectedOption) {
-            score = mockTest.max_score || 1; // Default score is 1 if max_score is not defined
+        let totalScore = 0;
+        const fullMark = questions.length; // Full marks is the number of questions
+        const passMark = Math.ceil(fullMark * 0.6); // Passing mark: 60% of the total marks
+
+        // Loop through each question and compare the user’s answer
+        for (const question of questions) {
+            // Find the user's answer for this question
+            const userAnswer = answers.find(answer => answer.questionId === question.id);
+
+            if (userAnswer) {
+                // If the user's selected option matches the correct answer
+                if (userAnswer.selectedOption === question.answer) {
+                    totalScore += 1; // Increment score for correct answers
+                }
+            }
         }
 
-        // Save the result to MockTestResult
-        const mockTestResult = await MockTestResult.create({
-            userId,
-            mockTestId,
-            score,
-            status: 'completed',
-            submittedAt: new Date(),
+        // Store the result in the Result model
+        const result = await Result.create({
+            description: 'Mock test result for user ' + userId,
+            obtained_mark: totalScore,
+            pass_mark: passMark,
+            full_mark: fullMark,
+            highest_mark: fullMark // Highest mark is the full mark of the test
         });
 
+        // Respond with the test result and score
         res.json({
-            message: 'Mock Test submitted successfully and result saved',
-            score,
-            resultId: mockTestResult.id,
+            message: 'Mock Test submitted successfully',
+            totalScore,
+            passMark,
+            fullMark,
+            resultId: result.id,
+            passed: totalScore >= passMark // Check if the user passed
         });
+
     } catch (error) {
-        res.status(400).json({ message: error.message });
+        console.error(error);
+        res.status(500).json({ message: 'Error submitting the test result' });
     }
 };

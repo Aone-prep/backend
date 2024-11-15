@@ -3,13 +3,14 @@ const authMiddleware = require('../../middlewares/authMiddleware');
 
 const userController = require('../../controllers/user/userController');
 
-const userController = require('../../controllers/userController');
+//const userController = require('../../controllers/userController');
 const courseCategoryController = require('../../controllers/admin/courseCategoryController');
 const courseController= require('../../controllers/admin/courseController');
 // const adminController = require('../../controllers/admin/adminController');
 const QuestionTypecontroller = require('../../controllers/admin/questionTypecontroller');
 const mocktestController = require('../../controllers/admin/mocktestController');
 const questionController = require('../../controllers/admin/questionsController');
+const mockTestController = require('../../controllers/user/submitMockTestResult'); // Update the path based on your project structure
 
 const router = express.Router();
 
@@ -52,4 +53,10 @@ router.get('/categories/:id',courseCategoryController.getCourseCategoryById);
 //course 
 router.get('/courses', courseController.getAllCourses);
 router.get('/courses/:id',courseController.getCourseById);
+
+
+
+// Submit the result for a mock test (POST route)
+router.post('/submit', authMiddleware, mockTestController.submitMockTestResult);
+
 module.exports= router;
