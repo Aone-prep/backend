@@ -74,7 +74,7 @@ jobs:
             docker pull stalinrijal/aone-prep:${DOCKER_TAG}
             docker stop \$(docker ps -q) 2>/dev/null || true
             docker rm \$(docker ps -a -q) 2>/dev/null || true
-            docker run -d -p 3000:3000 stalinrijal/aone-prep:${DOCKER_TAG}
+            docker run -d -p 3030:3030 stalinrijal/aone-prep:${DOCKER_TAG}
             EOL
             
             # Copy deployment script to VM and execute
