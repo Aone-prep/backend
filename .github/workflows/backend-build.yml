@@ -81,14 +81,20 @@ jobs:
         if: success()
         uses: actions/github-script@v6
         with:
-          github-token: ${{ secrets.AONEPREP_GITHUB_TOKEN }}  # Use a PAT with necessary permissions
+          github-token: ${{ secrets.AONEPREP_GITHUB_TOKEN }}
           script: |
-            await github.rest.actions.createWorkflowDispatch({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              workflow_id: 'backend-deploy.yml',
-              ref: context.ref,
-              inputs: {
-                DOCKER_TAG: '${{ env.DOCKER_TAG }}'
-              }
-            });
+            try {
+              await github.rest.actions.createWorkflowDispatch({
+                owner: context.repo.owner,
+                repo: 'backend',  // Explicitly specify the repository name
+                workflow_id: 'backend-deploy.yml',
+                ref: 'pipeline',  // Explicitly specify the branch
+                inputs: {
+                  DOCKER_TAG: '${{ env.DOCKER_TAG }}'
+                }
+              });
+              console.log('Workflow dispatch triggered successfully');
+            } catch (error) {
+              console.error('Error triggering workflow:', error);
+              core.setFailed(error.message);
+            }
