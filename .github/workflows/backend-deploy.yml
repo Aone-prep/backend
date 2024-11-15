@@ -1,11 +1,11 @@
+name: Backend Deployment
+
 on:
   workflow_dispatch:
     inputs:
       DOCKER_TAG:
-        description: 'Docker image tag'
+        description: "Docker tag for deployment"
         required: true
-  repository_dispatch:
-    types: [deploy-backend] 
 
 jobs:
   deploy:
