@@ -1,7 +1,9 @@
 const express = require('express');
 const authMiddleware = require('../../middlewares/authMiddleware'); // Assuming authMiddleware is in this path
 const resultController = require('../../controllers/user/resultController'); // Update the path based on your project structure
+const mockTestController = require('../../controllers/user/submitMockTestResult'); // Update the path based on your project structure
 const router = express.Router();
+
 
 // Protected Routes (requires authentication)
 
@@ -16,6 +18,9 @@ router.post('/results', authMiddleware, resultController.createUserResult);
 
 // Update an existing result by ID for the logged-in user
 router.put('/results/:id', authMiddleware, resultController.updateUserResult);
+
+// Submit the result for a mock test (POST route)
+router.post('/submit', authMiddleware, mockTestController.submitMockTestResult);
 
 // Delete a result by ID for the logged-in user
 router.delete('/results/:id', authMiddleware, resultController.deleteUserResult);
