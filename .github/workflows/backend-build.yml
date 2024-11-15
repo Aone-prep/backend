@@ -1,0 +1,93 @@
+name: Backend build
+
+on:
+  push:
+    branches:
+      - pipeline
+
+env:
+  DOCKER_IMAGE: stalinrijal/aone-prep
+  DOCKER_TAG: backend-${{ github.run_number }}
+
+# Add permissions block at the workflow level
+permissions:
+  contents: read
+  actions: write    # This is required to trigger other workflows
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    environment: dev
+
+    steps:
+#       - name: Create Azure Credentials
+#         run: |
+#           mkdir -p $HOME/.azure
+#           echo '[default]' > $HOME/.azure/credentials
+#           echo 'azure_subscription_id = bac12785-937a-4bd3-93d0-99f6eb81ba22' >> $HOME/.azure/credentials
+#           echo 'azure_tenant_id = ed27b597-cea0-4942-8c6f-40e6a78bf47d' >> $HOME/.azure/credentials
+#           echo 'azure_username = ${{ secrets.AZURE_USER_NAME }}' >> $HOME/.azure/credentials
+#           echo 'azure_password = ${{ secrets.AZURE_PASSWORD }}' >> $HOME/.azure/credentials
+
+#       - name: Install Azure CLI
+#         run: |
+#           curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+
+#       - name: Azure Login
+#         run: |
+#           az login --use-device-code || az login -u "${{ secrets.AZURE_USER_NAME }}" -p "${{ secrets.AZURE_PASSWORD }}"
+#           az account set --subscription "bac12785-937a-4bd3-93d0-99f6eb81ba22"
+
+#       - name: Get Azure VM IP
+#         id: get-ip
+#         run: |
+#           VM_IP=$(az network public-ip show --name frontend-public-ip --resource-group myResourceGroup --query "ipAddress" -o tsv)
+#           echo "VM_IP=$VM_IP" >> $GITHUB_ENV
+
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Verify Docker Hub login
+        run: docker info
+
+      - name: Build and push Docker image
+        id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: true
+          tags: ${{ env.DOCKER_IMAGE }}:${{ env.DOCKER_TAG }}
+
+      - name: Output image digest
+        run: 'echo "Image Digest: ${{ steps.docker_build.outputs.digest }}"'
+
+      - name: Prune old images (keep only 5 latest)
+        run: |
+          echo "Pruning images to keep only the 5 latest..."
+          docker image prune -f --filter "until=240h"
+          docker images --filter "dangling=false" --format "{{.Repository}}:{{.Tag}}" | head -n -5 | xargs docker rmi -f
+      
+      - name: Trigger Deployment Pipeline
+        if: success()
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.AONEPREP_GITHUB_TOKEN }}  # Use a PAT with necessary permissions
+          script: |
+            await github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'backend-deploy.yml',
+              ref: context.ref,
+              inputs: {
+                DOCKER_TAG: '${{ env.DOCKER_TAG }}'
+              }
+            });
