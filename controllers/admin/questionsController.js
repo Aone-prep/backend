@@ -19,7 +19,7 @@ exports.getAllQuestions = async (req, res) => {
         );
         res.json(questions);
     } catch (error) {
-        res.status(400).json({ message: error.message });
+        res.status(500).json({ message: error.message });
     }
 };
 
@@ -46,7 +46,7 @@ exports.getQuestionById = async (req, res) => {
         if (!question) return res.status(404).json({ message: 'Question not found' });
         res.json(question);
     } catch (error) {
-        res.status(400).json({ message: error.message });
+        res.status(500).json({ message: error.message });
     }
 };
 
@@ -59,7 +59,7 @@ exports.createQuestion = async (req, res) => {
         res.json({ message: 'Question Added Successfully' });
         // res.status(201).json(question);
     } catch (error) {
-        res.status(400).json({ message: error.message });
+        res.status(500).json({ message: error.message });
     }
 };
 
@@ -73,7 +73,7 @@ exports.updateQuestion = async (req, res) => {
         await question.update({ description, optionA, optionB, optionC, optionD, answer, status });
         res.json({ message: 'Question updated successfully' });
     } catch (error) {
-        res.status(400).json({ message: error.message });
+        res.status(500).json({ message: error.message });
     }
 };
 
@@ -86,6 +86,6 @@ exports.deleteQuestion = async (req, res) => {
         await question.destroy();
         res.json({ message: 'Question deleted successfully' });
     } catch (error) {
-        res.status(400).json({ message: error.message });
+        res.status(500).json({ message: error.message });
     }
 };

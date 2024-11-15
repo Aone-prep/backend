@@ -1,6 +1,14 @@
 const express = require('express');
 const authMiddleware = require('../../middlewares/authMiddleware');
+
 const userController = require('../../controllers/user/userController');
+const courseCategoryController = require('../../controllers/admin/courseCategoryController');
+const courseController= require('../../controllers/admin/courseController');
+// const adminController = require('../../controllers/admin/adminController');
+const QuestionTypecontroller = require('../../controllers/admin/questionTypecontroller');
+const mocktestController = require('../../controllers/admin/mocktestController');
+const questionController = require('../../controllers/admin/questionsController');
+
 const router = express.Router();
 
 
@@ -9,10 +17,37 @@ const router = express.Router();
 router.post('/register', userController.registerUser);
 router.post('/login', userController.loginUser);
 
+
 // Protected Routes (requires authentication)
+
+
+
+
+// User Routes
+
 router.get('/info', authMiddleware, userController.getUserInfo);
 router.put('/update-info', authMiddleware, userController.updateUserInfo);
 router.post('/reset-password', authMiddleware, userController.resetPassword);
 router.delete('/delete-account', authMiddleware, userController.deleteUser);
 
-module.exports = router;
+
+//questions 
+router.get('/questions',questionController.getAllQuestions);
+router.get('/questions/:id', questionController.getQuestionById);
+
+//mocktest
+router.get('/mocktests',mocktestController.getAllMockTests);
+router.get('/mocktests/:id',mocktestController.getMockTestById);
+
+//questionTypes
+router.get ('/questionType', QuestionTypecontroller.getAllQuestionType);
+router.get ('/questionType/:id', QuestionTypecontroller.getQuestionTypeById);
+
+//Course-Category
+router.get('/categories', courseCategoryController.getAllCourseCategories);
+router.get('/categories/:id',courseCategoryController.getCourseCategoryById);
+
+//course 
+router.get('/courses', courseController.getAllCourses);
+router.get('/courses/:id',courseController.getCourseById);
+module.exports= router;

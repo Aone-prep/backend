@@ -6,7 +6,7 @@ exports.getAllQuestionType = async (req, res) => {
         const qtype = await QuestionType.findAll();
         res.json(qtype);
     } catch (error) {
-        res.status(400).json({ message: error.message });
+        res.status(500).json({ message: error.message });
     }
 };
 
@@ -18,7 +18,7 @@ exports.getQuestionTypeById = async (req, res) => {
         if (!qtype) return res.status(404).json({ message: 'Question Type not found' });
         res.json(qtype);
     } catch (error) {
-        res.status(400).json({ message: error.message });
+        res.status(500).json({ message: error.message });
     }
 };
 
@@ -29,7 +29,7 @@ exports.createQuestionType = async (req, res) => {
         const qtype = await QuestionType.create({ name, status });
         res.status(201).json(qtype);
     } catch (error) {
-        res.status(400).json({ message: error.message });
+        res.status(500).json({ message: error.message });
     }
 };
 
@@ -46,7 +46,7 @@ exports.updateQuestionType = async (req, res) => {
         {where:{id}});
         res.json({ message: 'Question Type updated successfully',QuestionType });
     } catch (error) {
-        res.status(400).json({ message: error.message });
+        res.status(500).json({ message: error.message });
     }
 };
 // Delete question by ID
@@ -58,6 +58,6 @@ exports.deleteQuestionType = async (req, res) => {
         await QuestionType.destroy({where:{id}});
         res.json({ message: 'Question Type deleted successfully' });
     } catch (error) {
-        res.status(400).json({ message: error.message });
+        res.status(500).json({ message: error.message });
     }
 };

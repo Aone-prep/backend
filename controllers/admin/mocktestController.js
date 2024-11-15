@@ -1,12 +1,19 @@
-const { MockTest } = require('../../models');
+const { MockTest,Course } = require('../../models');
 
 // Get all mock tests
 exports.getAllMockTests = async (req, res) => {
     try {
-        const mockTests = await MockTest.findAll();
+        const mockTests = await MockTest.findAll(
+            {
+                include: [{
+                    model:Course,
+                    as: 'course'
+                }]
+        }
+        );
         res.json(mockTests);
     } catch (error) {
-        res.status(400).json({ message: error.message });
+        res.status(500).json({ message: error.message });
     }
 };
 
@@ -14,22 +21,30 @@ exports.getAllMockTests = async (req, res) => {
 exports.getMockTestById = async (req, res) => {
     const { id } = req.params;
     try {
-        const mockTest = await MockTest.findByPk(id);
+        const mockTest = await MockTest.findByPk(id,
+            {
+                include: [{
+                    model:Course,
+                    as: 'course'
+                }]
+    
+        }
+        );
         if (!mockTest) return res.status(404).json({ message: 'Mock Test not found' });
         res.json(mockTest);
     } catch (error) {
-        res.status(400).json({ message: error.message });
+        res.status(500).json({ message: error.message });
     }
 };
 
 // Create a new mock test
 exports.createMockTest = async (req, res) => {
-    const { name, description, duration, max_score, status } = req.body;
+    const { name, description, duration, max_score, course_id ,status } = req.body;
     try {
-        const mockTest = await MockTest.create({ name, description, duration, max_score, status });
+        const mockTest = await MockTest.create({ name, description, duration, max_score, course_id,status });
         res.json({ message: 'Mock Test Added Successfully'});
     } catch (error) {
-        res.status(400).json({ message: error.message });
+        res.status(500).json({ message: error.message });
     }
 };
 
@@ -43,7 +58,7 @@ exports.updateMockTest = async (req, res) => {
         await mockTest.update({ name, description, duration, max_score, status });
         res.json({ message: 'Mock Test updated successfully' });
     } catch (error) {
-        res.status(400).json({ message: error.message });
+        res.status(500).json({ message: error.message });
     }
 };
 
