@@ -1,0 +1,138 @@
+# name: Frontend Deployment
+
+# on:
+#   push:
+#     branches: [ dev ]
+#   workflow_dispatch:
+
+# jobs:
+#   deploy:
+#     runs-on: ubuntu-latest
+    
+#     steps:
+#       - uses: actions/checkout@v2
+      
+#       - name: Create SSH keys from secrets
+#         run: |
+#           mkdir -p ~/.ssh
+#           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+#           echo "${{ secrets.SSH_PUBLIC_KEY }}" > ~/.ssh/id_rsa.pub
+#           chmod 600 ~/.ssh/id_rsa
+#           chmod 644 ~/.ssh/id_rsa.pub
+#           ssh-keyscan github.com >> ~/.ssh/known_hosts
+      
+#       - name: Create Azure Credentials
+#         run: |
+#           mkdir -p $HOME/.azure
+#           echo '[default]' > $HOME/.azure/credentials
+#           echo 'azure_subscription_id = bac12785-937a-4bd3-93d0-99f6eb81ba22' >> $HOME/.azure/credentials
+#           echo 'azure_tenant_id = ed27b597-cea0-4942-8c6f-40e6a78bf47d' >> $HOME/.azure/credentials
+#           echo 'azure_username = ${{ secrets.AZURE_USER_NAME }}' >> $HOME/.azure/credentials
+#           echo 'azure_password = ${{ secrets.AZURE_PASSWORD }}' >> $HOME/.azure/credentials
+
+#       - name: Install Azure CLI
+#         run: |
+#           curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+
+#       - name: Azure Login
+#         run: |
+#           az login --use-device-code || az login -u "${{ secrets.AZURE_USER_NAME }}" -p "${{ secrets.AZURE_PASSWORD }}"
+#           az account set --subscription "bac12785-937a-4bd3-93d0-99f6eb81ba22"
+
+#       - name: Get Azure VM IP
+#         id: get-ip
+#         run: |
+#           VM_IP=$(az network public-ip show --name frontend-public-ip --resource-group myResourceGroup --query "ipAddress" -o tsv)
+#           echo "VM_IP=$VM_IP" >> $GITHUB_ENV
+
+#       - name: Copy SSH keys to VM
+#         run: |
+#           ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa adminuser@${VM_IP} "mkdir -p ~/.ssh && chmod 700 ~/.ssh && chown adminuser:adminuser ~/.ssh"
+#           ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa adminuser@${VM_IP} "rm -f ~/.ssh/id_rsa ~/.ssh/id_rsa.pub"
+
+#           # Create the .ssh directory on the VM with appropriate permissions if it doesn't exist
+#           ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa adminuser@${VM_IP} "mkdir -p ~/.ssh && chmod 700 ~/.ssh"
+      
+#           # Copy the private and public SSH keys to the VM
+#           scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ~/.ssh/id_rsa adminuser@${VM_IP}:~/.ssh/id_rsa
+#           scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ~/.ssh/id_rsa.pub adminuser@${VM_IP}:~/.ssh/id_rsa.pub
+      
+#           # Set permissions for the SSH keys on the VM
+#           ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa adminuser@${VM_IP} "chmod 400 ~/.ssh/id_rsa && chmod 644 ~/.ssh/id_rsa.pub"
+    
+#       - name: Deploy to Azure VM
+#         run: |
+#           # Create deployment script
+#           cat > deploy.sh << 'EOL'
+#           #!/bin/bash
+
+#           sudo su - adminuser
+
+#           # Ensure GitHub is in known_hosts
+#           mkdir -p ~/.ssh
+#           ssh-keyscan github.com >> ~/.ssh/known_hosts
+
+#           # Kill existing npm process if any
+#           pkill -f "npm start" || true
+
+#           # Remove existing frontend directory if it exists
+#           if [ -d "frontend" ]; then
+#             rm -rf frontend
+#           fi
+
+#           # Clone the repository with SSH and check if clone succeeds
+#           git clone git@github.com:Aone-prep/frontend.git
+#           if [ "$?" -eq 0 ]; then
+#             cd frontend
+#             git checkout dev
+#           else
+#             echo "Error: Git clone failed"
+#             exit 1
+#           fi
+
+#           # Setup NVM and Node.js
+#           export NVM_DIR="$HOME/.nvm"
+#           [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+#           [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+
+#           # Install Node.js if not already installed
+#           nvm install 16.15.1
+#           nvm use 16.15.1
+
+#           # Install dependencies
+#           if ! npm install; then
+#             echo "Error: npm install failed"
+#             exit 1
+#           fi
+
+#           # Create systemd service file for the frontend
+#           sudo tee /etc/systemd/system/frontend.service << EOF
+#           [Unit]
+#           Description=Frontend Node.js Application
+#           After=network.target
+
+#           [Service]
+#           Type=simple
+#           User=adminuser
+#           WorkingDirectory=/home/adminuser/frontend
+#           Environment=PATH=/home/adminuser/.nvm/versions/node/v16.15.1/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+#           ExecStart=/home/adminuser/.nvm/versions/node/v16.15.1/bin/npm start
+#           Restart=always
+
+#           [Install]
+#           WantedBy=multi-user.target
+#           EOF
+
+#           # Reload systemd and start the service
+#           sudo systemctl daemon-reload
+#           sudo systemctl enable frontend
+#           sudo systemctl restart frontend
+#           EOL
+
+#           # Copy deployment script to VM and execute
+#           scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa deploy.sh adminuser@${VM_IP}:~/deploy.sh
+#           ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa adminuser@${VM_IP} "chmod +x ~/deploy.sh && sudo bash ~/deploy.sh"
+
+#       - name: Verify Deployment
+#         run: |
+#           ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa adminuser@${VM_IP} "systemctl status frontend"
