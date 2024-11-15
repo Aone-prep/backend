@@ -2,8 +2,6 @@ const express = require('express');
 const authMiddleware = require('../../middlewares/authMiddleware');
 
 const userController = require('../../controllers/user/userController');
-
-const userController = require('../../controllers/userController');
 const courseCategoryController = require('../../controllers/admin/courseCategoryController');
 const courseController= require('../../controllers/admin/courseController');
 // const adminController = require('../../controllers/admin/adminController');
