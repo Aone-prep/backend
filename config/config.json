@@ -1,10 +1,10 @@
 {
   
   "development": {
-    "username": "root",
-    "password": "",
+    "username": "adminuser",
+    "password": "P@ssw0rd1234!",
     "database": "capstone",
-    "host": "localhost",
+    "host": "aoneprep-sql-server.database.windows.net",
     "dialect": "mysql"
   },
   "test": {
