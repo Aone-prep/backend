@@ -5,7 +5,14 @@
     "password": "P@ssw0rd1234!",
     "database": "capstone",
     "host": "aoneprep-mysql-server.mysql.database.azure.com",
-    "dialect": "mysql"
+    "dialect": "mysql",
+    "dialectOptions": {
+      "ssl": {
+        "require": true,
+        "rejectUnauthorized": false
+      }
+    }
+
   },
   "test": {
     "username": "root",
