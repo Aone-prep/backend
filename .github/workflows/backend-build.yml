@@ -83,12 +83,32 @@ jobs:
         with:
           github-token: ${{ secrets.AONEPREP_GITHUB_TOKEN }}
           script: |
+            // List workflows in the repository
+            const workflows = await github.rest.repos.getContent({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              path: '.github/workflows'
+            });
+      
+            // Check if the target workflow file exists
+            const workflowFileName = 'backend-deploy.yml';
+            const fileExists = workflows.data.some(file => file.name === workflowFileName);
+      
+            if (!fileExists) {
+              console.log(`Workflow file '${workflowFileName}' not found in '.github/workflows'.`);
+              throw new Error(`Cannot trigger deployment: Workflow file '${workflowFileName}' does not exist.`);
+            } else {
+              console.log(`Found workflow file '${workflowFileName}'. Proceeding to dispatch...`);
+            }
+      
+            // Dispatch the workflow
             await github.rest.actions.createWorkflowDispatch({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              workflow_id: 'backend-deploy.yml',
+              workflow_id: workflowFileName,
               ref: context.ref,
               inputs: {
-                DOCKER_TAG: '${{ env.DOCKER_TAG }}'
+                DOCKER_TAG: process.env.DOCKER_TAG
               }
             });
+    
