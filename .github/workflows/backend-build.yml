@@ -87,7 +87,7 @@ jobs:
               await github.rest.actions.createWorkflowDispatch({
                 owner: context.repo.owner,
                 repo: 'backend',  // Explicitly specify the repository name
-                workflow_id: 'backend-deploy.yml',
+                workflow_id: 'Backend Deployment',
                 ref: 'pipeline',  // Explicitly specify the branch
                 inputs: {
                   DOCKER_TAG: '${{ env.DOCKER_TAG }}'
