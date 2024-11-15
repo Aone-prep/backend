@@ -52,7 +52,6 @@ exports.submitMockTestResult = async (req, res) => {
         });
 
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Error submitting the test result' });
+        res.status(404).json({ message: 'Error submitting the test result' });
     }
 };
