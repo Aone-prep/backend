@@ -6,7 +6,7 @@ on:
       - pipeline
 
 env:
-  DOCKER_IMAGE: stalinrijal/aone-prep
+  DOCKER_IMAGE: stalinrijal/aone-prep-backend
   DOCKER_TAG: backend-${{ github.run_number }}
 
 # Add permissions block at the workflow level
@@ -136,10 +136,10 @@ jobs:
             echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
             
             # Pull and run the Docker image
-            docker pull stalinrijal/aone-prep:${DOCKER_TAG}
+            docker pull stalinrijal/aone-prep-backend:${DOCKER_TAG}
             docker stop \$(docker ps -q) 2>/dev/null || true
             docker rm \$(docker ps -a -q) 2>/dev/null || true
-            docker run -d -p 3030:3030 stalinrijal/aone-prep:${DOCKER_TAG}
+            docker run -d -p 3030:3030 stalinrijal/aone-prep-backend:${DOCKER_TAG}
             EOL
             
             # Copy deployment script to VM and execute
