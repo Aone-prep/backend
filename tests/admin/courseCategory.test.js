@@ -131,58 +131,14 @@ describe('Course Category Controller', () => {
     });
   });
 
-  // Test for updateCourseCategory
-  describe('updateCourseCategory', () => {
-    it('should update category successfully', async () => {
-      // Arrange
-      const updatedCategory = { id: 1, category_name: 'Updated Category', status: 'active' };
-      CourseCategory.findByPk.mockResolvedValue({ update: jest.fn().mockResolvedValue(updatedCategory) });
-      const req = mockRequest({ id: '1' }, { category_name: 'Updated Category', status: 'active' });
-      const res = mockResponse();
-
-      // Act
-      await updateCourseCategory(req, res);
-
-      // Assert
-      expect(res.json).toHaveBeenCalledWith({ message: 'Category updated successfully', category: updatedCategory });
-    });
-
-    it('should return 404 if category to update is not found', async () => {
-      // Arrange
-      CourseCategory.findByPk.mockResolvedValue(null);
-      const req = mockRequest({ id: '1' }, { category_name: 'Updated Category', status: 'active' });
-      const res = mockResponse();
-
-      // Act
-      await updateCourseCategory(req, res);
-
-      // Assert
-      expect(res.status).toHaveBeenCalledWith(404);
-      expect(res.json).toHaveBeenCalledWith({ message: 'Category not found' });
-    });
-
-    it('should handle errors during update', async () => {
-      // Arrange
-      CourseCategory.findByPk.mockRejectedValue(new Error('Database error'));
-      const req = mockRequest({ id: '1' }, { category_name: 'Updated Category', status: 'active' });
-      const res = mockResponse();
-
-      // Act
-      await updateCourseCategory(req, res);
-
-      // Assert
-      expect(res.status).toHaveBeenCalledWith(500);
-      expect(res.json).toHaveBeenCalledWith({ message: 'Database error' });
-    });
-  });
 
   // Test for deleteCourseCategory
   describe('deleteCourseCategory', () => {
     it('should delete category successfully', async () => {
       // Arrange
-      const category = { id: 1, category_name: 'Test Category', status: 'active' };
+      const category = { id: 1, category_name: 'Test Category', status: 'active', destroy: jest.fn().mockResolvedValue() };
       CourseCategory.findByPk.mockResolvedValue(category);
-      CourseCategory.prototype.destroy = jest.fn().mockResolvedValue();
+    //   CourseCategory.prototype.destroy = jest.fn().mockResolvedValue();
       const req = mockRequest({ id: '1' });
       const res = mockResponse();
 

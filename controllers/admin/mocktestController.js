@@ -13,7 +13,7 @@ exports.getAllMockTests = async (req, res) => {
         );
         res.json(mockTests);
     } catch (error) {
-        res.status(400).json({ message: error.message });
+        res.status(500).json({ message: error.message });
     }
 };
 
@@ -33,7 +33,7 @@ exports.getMockTestById = async (req, res) => {
         if (!mockTest) return res.status(404).json({ message: 'Mock Test not found' });
         res.json(mockTest);
     } catch (error) {
-        res.status(400).json({ message: error.message });
+        res.status(500).json({ message: error.message });
     }
 };
 
@@ -44,7 +44,7 @@ exports.createMockTest = async (req, res) => {
         const mockTest = await MockTest.create({ name, description, duration, max_score, course_id,status });
         res.json({ message: 'Mock Test Added Successfully'});
     } catch (error) {
-        res.status(400).json({ message: error.message });
+        res.status(500).json({ message: error.message });
     }
 };
 
@@ -58,7 +58,7 @@ exports.updateMockTest = async (req, res) => {
         await mockTest.update({ name, description, duration, max_score, status });
         res.json({ message: 'Mock Test updated successfully' });
     } catch (error) {
-        res.status(400).json({ message: error.message });
+        res.status(500).json({ message: error.message });
     }
 };
 
