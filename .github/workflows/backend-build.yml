@@ -9,10 +9,9 @@ env:
   DOCKER_IMAGE: stalinrijal/aone-prep-backend
   DOCKER_TAG: backend-${{ github.run_number }}
 
-# Add permissions block at the workflow level
 permissions:
   contents: read
-  actions: write    # This is required to trigger other workflows
+  actions: write
   id-token: write
 
 jobs:
@@ -21,30 +20,6 @@ jobs:
     environment: dev
 
     steps:
-#       - name: Create Azure Credentials
-#         run: |
-#           mkdir -p $HOME/.azure
-#           echo '[default]' > $HOME/.azure/credentials
-#           echo 'azure_subscription_id = bac12785-937a-4bd3-93d0-99f6eb81ba22' >> $HOME/.azure/credentials
-#           echo 'azure_tenant_id = ed27b597-cea0-4942-8c6f-40e6a78bf47d' >> $HOME/.azure/credentials
-#           echo 'azure_username = ${{ secrets.AZURE_USER_NAME }}' >> $HOME/.azure/credentials
-#           echo 'azure_password = ${{ secrets.AZURE_PASSWORD }}' >> $HOME/.azure/credentials
-
-#       - name: Install Azure CLI
-#         run: |
-#           curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
-
-#       - name: Azure Login
-#         run: |
-#           az login --use-device-code || az login -u "${{ secrets.AZURE_USER_NAME }}" -p "${{ secrets.AZURE_PASSWORD }}"
-#           az account set --subscription "bac12785-937a-4bd3-93d0-99f6eb81ba22"
-
-#       - name: Get Azure VM IP
-#         id: get-ip
-#         run: |
-#           VM_IP=$(az network public-ip show --name frontend-public-ip --resource-group myResourceGroup --query "ipAddress" -o tsv)
-#           echo "VM_IP=$VM_IP" >> $GITHUB_ENV
-
       - name: Checkout code
         uses: actions/checkout@v2
 
@@ -75,7 +50,7 @@ jobs:
         run: |
           echo "Pruning images to keep only the 5 latest..."
           docker image prune -f --filter "until=240h"
-          docker images --filter "dangling=false" --format "{{.Repository}}:{{.Tag}}" | head -n -5 | xargs docker rmi -f
+          docker images --filter "dangling=false" --format "{{.Repository}}:{{.Tag}}" | head -n -5 | xargs docker rmi -f || true
 
       - name: Create SSH keys from secrets
         run: |
@@ -110,12 +85,6 @@ jobs:
           VM_IP=$(az network public-ip show --name backend-public-ip --resource-group myResourceGroup --query "ipAddress" -o tsv)
           echo "VM_IP=$VM_IP" >> $GITHUB_ENV
 
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Deploy
-        run: echo "Deploying application..."
-
       - name: Run Azure Commands
         run: |
           az account show
@@ -123,61 +92,76 @@ jobs:
 
       - name: Deploy to Azure VM
         env:
-            DOCKER_TAG: ${{ github.event.inputs.DOCKER_TAG }}
-            VM_IP: ${{ env.VM_IP }}
-            DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-            DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+          DOCKER_TAG: backend-${{ github.run_number }}
+          VM_IP: ${{ env.VM_IP }}
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         run: |
-            # Create deployment script
-            cat > deploy.sh << EOL
-            #!/bin/bash
-            
-            # Docker login using credentials
-            echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
-            
-            # Pull and run the Docker image
-            docker pull stalinrijal/aone-prep-backend:${DOCKER_TAG}
-            docker stop \$(docker ps -q) 2>/dev/null || true
-            docker rm \$(docker ps -a -q) 2>/dev/null || true
-            docker run -d -p 3030:3030 stalinrijal/aone-prep-backend:${DOCKER_TAG}
-            EOL
-            
-            # Copy deployment script to VM and execute
-            scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa deploy.sh adminuser@$VM_IP:~/deploy.sh
-            ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa adminuser@$VM_IP "export DOCKER_TAG=${DOCKER_TAG} && export DOCKER_USERNAME='${{ secrets.DOCKER_USERNAME }}' && export DOCKER_PASSWORD='${{ secrets.DOCKER_PASSWORD }}' && chmod +x ~/deploy.sh && sudo -E bash ~/deploy.sh"
+          # Create deployment script with proper error handling and logging
+          cat > deploy.sh << 'EOL'
+          #!/bin/bash
           
-    # - name: Trigger Deployment Pipeline
-    #   if: success()
-    #   uses: actions/github-script@v6
-    #   with:
-    #     github-token: ${{ secrets.AONEPREP_GITHUB_TOKEN }}
-    #     script: |
-    #       // List workflows in the repository
-    #       const workflows = await github.rest.repos.getContent({
-    #         owner: context.repo.owner,
-    #         repo: context.repo.repo,
-    #         path: '.github/workflows'
-    #       });
-    
-    #       // Check if the target workflow file exists
-    #       const workflowFileName = 'backend-deploy.yml';
-    #       const fileExists = workflows.data.some(file => file.name === workflowFileName);
-    
-    #       if (!fileExists) {
-    #         console.log(`Workflow file '${workflowFileName}' not found in '.github/workflows'.`);
-    #         throw new Error(`Cannot trigger deployment: Workflow file '${workflowFileName}' does not exist.`);
-    #       } else {
-    #         console.log(`Found workflow file '${workflowFileName}'. Proceeding to dispatch...`);
-    #       }
-    
-    #       // Dispatch the workflow
-    #       await github.rest.actions.createWorkflowDispatch({
-    #         owner: context.repo.owner,
-    #         repo: context.repo.repo,
-    #         workflow_id: workflowFileName,
-    #         ref: context.ref,
-    #         inputs: {
-    #           DOCKER_TAG: process.env.DOCKER_TAG
-    #         }
-    #       });
-  
+          # Exit on any error
+          set -e
+          
+          # Enable command printing
+          set -x
+          
+          # Get arguments
+          DOCKER_TAG="$1"
+          DOCKER_USERNAME="$2"
+          DOCKER_PASSWORD="$3"
+          
+          # Function to log messages
+          log_message() {
+            echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1"
+          }
+          
+          # Docker login using credentials
+          log_message "Logging into Docker Hub..."
+          echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+          
+          # Pull the Docker image
+          log_message "Pulling image: stalinrijal/aone-prep-backend:$DOCKER_TAG"
+          docker pull stalinrijal/aone-prep-backend:$DOCKER_TAG
+          
+          # Stop and remove existing containers
+          log_message "Cleaning up existing containers..."
+          docker ps -q | xargs -r docker stop
+          docker ps -a -q | xargs -r docker rm
+          
+          # Run the new container
+          log_message "Starting new container..."
+          docker run -d -p 3030:3030 stalinrijal/aone-prep-backend:$DOCKER_TAG
+          
+          # Verify container is running
+          log_message "Verifying container status..."
+          docker ps
+          
+          log_message "Deployment completed successfully!"
+          EOL
+          
+          # Make script executable
+          chmod +x deploy.sh
+          
+          # Copy deployment script to VM
+          echo "Copying deployment script to VM..."
+          scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa deploy.sh adminuser@$VM_IP:~/deploy.sh
+          
+          # Execute deployment script on VM
+          echo "Executing deployment script on VM..."
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa adminuser@$VM_IP "chmod +x ~/deploy.sh && sudo -E ~/deploy.sh '$DOCKER_TAG' '${{ secrets.DOCKER_USERNAME }}' '${{ secrets.DOCKER_PASSWORD }}'"
+
+      - name: Verify Deployment
+        run: |
+          echo "Deployment completed. Verifying..."
+          echo "Docker Tag used: ${{ env.DOCKER_TAG }}"
+          echo "VM IP: ${{ env.VM_IP }}"
+
+      - name: Cleanup
+        if: always()
+        run: |
+          echo "Cleaning up sensitive files..."
+          rm -f ~/.ssh/id_rsa*
+          rm -f $HOME/.azure/credentials
+          docker logout
