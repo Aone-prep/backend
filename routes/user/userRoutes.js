@@ -32,6 +32,8 @@ router.put('/update-info', authMiddleware, userController.updateUserInfo);
 router.post('/reset-password', authMiddleware, userController.resetPassword);
 router.delete('/delete-account', authMiddleware, userController.deleteUser);
 
+router.get('/all', userController.getAllUsers);
+
 
 //questions 
 router.get('/questions',questionController.getAllQuestions);

@@ -55,6 +55,22 @@ exports.getUserInfo = async (req, res) => {
     }
 };
 
+exports.getAllUsers = async (req, res) => {
+    try {
+        // Fetch all users excluding the 'password' field
+        const users = await User.findAll({ attributes: { exclude: ['password'] } });
+
+        // If no users are found, return a 404 status
+        if (!users.length) return res.status(404).json({ message: 'No users found' });
+
+        // Return the list of users
+        res.json(users);
+    } catch (error) {
+        // If there's an error, return a 500 status with the error message
+        res.status(500).json({ message: 'Failed to fetch users', error: error.message });
+    }
+};
+
 
 // Update User Info (Protected)
 exports.updateUserInfo = async (req, res) => {
