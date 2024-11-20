@@ -19,6 +19,11 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'course_id',
         as: 'mockTests'
       });
+
+      Course.hasMany(models.Content, {
+        foreignKey: 'courseId',  // Foreign key in Content model
+        as: 'contents',  // Alias for the associated content
+      });
     }
   }
   Course.init({

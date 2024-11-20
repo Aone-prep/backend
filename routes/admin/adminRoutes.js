@@ -7,11 +7,15 @@ const adminController = require('../../controllers/admin/adminController');
 const QuestionTypecontroller = require('../../controllers/admin/questionTypecontroller');
 const mocktestController = require('../../controllers/admin/mocktestController');
 const questionController = require('../../controllers/admin/questionsController');
+const contentController = require('../../controllers/admin/contentController');
 
 //getting token
 router.post('/login', adminController.loginAdmin);
 
-
+//Content Routes 
+router.put('/contents/:contentId',adminMiddleware, contentController.updateContent);
+router.post('/contents', adminMiddleware,contentController.createContent);
+router.delete('/contents/:contentId', adminMiddleware,contentController.deleteContent);
 // Question Routes
 
 router.post('/questions',  adminMiddleware, questionController.createQuestion);

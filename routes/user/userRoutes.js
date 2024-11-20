@@ -33,6 +33,11 @@ router.post('/reset-password', authMiddleware, userController.resetPassword);
 router.delete('/delete-account', authMiddleware, userController.deleteUser);
 
 
+
+// Conetent Routes
+router.get('/contents', contentController.getAllContent);
+router.get('/contents/:contentId', contentController.getContentById);
+
 //questions 
 router.get('/questions',questionController.getAllQuestions);
 router.get('/questions/:id', questionController.getQuestionById);
