@@ -1,4 +1,4 @@
-const { Content, Course } = require('../models');
+const { Content, Course } = require('../../models');
 
 // Create new content (supports text, image, and video)
 exports.createContent = async (req, res) => {

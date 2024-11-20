@@ -21,6 +21,13 @@ module.exports = {
       level: {
         type: Sequelize.STRING
       },
+      in_progress:
+      {
+        type: Sequelize.INTEGER
+      },
+      rating:{
+        type: Sequelize.FLOAT
+      },
       category_id: {
         type: Sequelize.INTEGER,
         allowNull: false, // Make sure this is required

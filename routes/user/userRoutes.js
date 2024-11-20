@@ -10,6 +10,7 @@ const QuestionTypecontroller = require('../../controllers/admin/questionTypecont
 const mocktestController = require('../../controllers/admin/mocktestController');
 const questionController = require('../../controllers/admin/questionsController');
 const mockTestController = require('../../controllers/user/submitMockTestResult'); // Update the path based on your project structure
+const contentController = require('../../controllers/admin/contentController');
 
 const router = express.Router();
 

@@ -9,14 +9,20 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      course_id: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references:{
-          model: 'Courses',
-          key: 'id',
-        },
-        onDelete: 'CASCADE'
+      description: {
+        type: Sequelize.STRING
+      },
+      obtained_mark: {
+        type: Sequelize.INTEGER
+      },
+      pass_mark: {
+        type: Sequelize.INTEGER
+      },
+      full_mark: {
+        type: Sequelize.INTEGER
+      },
+      highest_mark: {
+        type: Sequelize.INTEGER
       },
       user_id: {
         type: Sequelize.INTEGER,
@@ -36,6 +42,7 @@ module.exports = {
         },
         onDelete: 'CASCADE'
       },
+      
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

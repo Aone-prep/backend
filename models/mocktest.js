@@ -15,6 +15,10 @@ module.exports = (sequelize, DataTypes) => {
       //   as: 'result',              // Alias for accessing the associated Result
       //   onDelete: 'CASCADE',       // Optional: cascade deletion of the Result if MockTest is deleted
       // });
+      MockTest.hasMany(models.UserTest, {
+        foreignKey: 'mocktest_id', // Foreign key in the UserTest model
+        as: 'userTests',           // Alias for accessing associated UserTests
+      });
       MockTest.hasOne(models.Question, {
         foreignKey: 'mock_test_id', // foreign key in Question model
         as: 'mockTest' // alias for association

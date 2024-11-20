@@ -10,6 +10,8 @@ exports.getAllCourseCategories = async (req, res) => {
     }
 };
 
+
+
 // Get course category by ID
 exports.getCourseCategoryById = async (req, res) => {
     try {
