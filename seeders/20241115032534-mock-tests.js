@@ -29,6 +29,7 @@ module.exports = {
         status: true,
         max_score: 100,
         course_id: 1, // Assign a course from the fetched list
+        level:1,
         createdAt: new Date(),
         updatedAt: new Date()
       },
@@ -39,6 +40,7 @@ module.exports = {
         status: true,
         max_score: 80,
         course_id: 2,
+        level:1,
         createdAt: new Date(),
         updatedAt: new Date()
       },
@@ -49,6 +51,7 @@ module.exports = {
         status: true,
         max_score: 120,
         course_id: 3,
+        level: 1,
         createdAt: new Date(),
         updatedAt: new Date()
       },
@@ -59,6 +62,7 @@ module.exports = {
         status: true,
         max_score: 100,
         course_id: 4,
+        level:2,
         createdAt: new Date(),
         updatedAt: new Date()
       },

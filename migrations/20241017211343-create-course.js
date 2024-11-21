@@ -1,4 +1,7 @@
 'use strict';
+
+const { sequelize } = require('../models');
+
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
@@ -27,6 +30,9 @@ module.exports = {
       },
       rating:{
         type: Sequelize.FLOAT
+      },
+      status:{
+        type: Sequelize.BOOLEAN
       },
       category_id: {
         type: Sequelize.INTEGER,

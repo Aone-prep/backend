@@ -11,6 +11,7 @@ module.exports = {
         category_id: 1, // Assuming this ID exists in CourseCategory
         in_progress:0,
         rating: 5,
+        status:0,
         createdAt: new Date(),
         updatedAt: new Date(),
       },
@@ -22,6 +23,7 @@ module.exports = {
         category_id: 1, // Assuming this ID exists in CourseCategory
         in_progress:1,
         rating: 4.5,
+        status:1,
         createdAt: new Date(),
         updatedAt: new Date(),
       },
@@ -33,6 +35,7 @@ module.exports = {
         category_id: 2, // Assuming this ID exists in CourseCategory
         in_progress:1.5,
         rating: 3.5,
+        status:0,
         createdAt: new Date(),
         updatedAt: new Date(),
       },
@@ -44,6 +47,7 @@ module.exports = {
         category_id: 3, // Assuming this ID exists in CourseCategory
         in_progress:5,
         rating: 5,
+        status:0,
         createdAt: new Date(),
         updatedAt: new Date(),
       },

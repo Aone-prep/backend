@@ -35,7 +35,8 @@ module.exports = (sequelize, DataTypes) => {
     duration: DataTypes.TIME,
     status: DataTypes.BOOLEAN,
     max_score: DataTypes.INTEGER,
-    course_id: DataTypes.INTEGER
+    course_id: DataTypes.INTEGER,
+    level:DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'MockTest',

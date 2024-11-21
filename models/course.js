@@ -33,7 +33,8 @@ module.exports = (sequelize, DataTypes) => {
     level: DataTypes.STRING,
     category_id: DataTypes.INTEGER,
     in_progress: DataTypes.INTEGER,
-    rating: DataTypes.FLOAT
+    rating: DataTypes.FLOAT,
+    status: DataTypes.BOOLEAN
     // user_id: DataTypes.INTEGER
   }, {
     sequelize,
