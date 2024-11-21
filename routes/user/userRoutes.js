@@ -31,7 +31,12 @@ router.post('/login', userController.loginUser);
 router.get('/info', authMiddleware, userController.getUserInfo);
 router.put('/update-info', authMiddleware, userController.updateUserInfo);
 router.post('/reset-password', authMiddleware, userController.resetPassword);
-router.delete('/delete-account', authMiddleware, userController.deleteUser);
+//router.delete('/delete-account', authMiddleware, userController.deleteUser);
+
+router.get('/all', userController.getAllUsers);
+
+// Logout Route (does not require authentication)
+router.post('/logout', userController.logoutUser);
 
 
 

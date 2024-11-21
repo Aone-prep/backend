@@ -44,6 +44,21 @@ exports.loginUser = async (req, res) => {
     }
 };
 
+// Logout User
+exports.logoutUser = async (req, res) => {
+    try {
+        const token = req.headers['authorization']?.split(' ')[1]; // Extract token
+        if (!token) return res.status(401).json({ message: 'No token provided' });
+
+        // Add token to blacklist
+        tokenBlacklist.push(token);
+        res.json({ message: 'Logged out successfully' });
+    } catch (error) {
+        res.status(500).json({ message: 'Failed to log out', error: error.message });
+    }
+};
+
+
 // Get User Info (Protected)
 exports.getUserInfo = async (req, res) => {
     try {
@@ -52,6 +67,22 @@ exports.getUserInfo = async (req, res) => {
         res.json(user);
     } catch (error) {
         res.status(500).json({ message: 'Failed to fetch user info', error: error.message });
+    }
+};
+
+exports.getAllUsers = async (req, res) => {
+    try {
+        // Fetch all users excluding the 'password' field
+        const users = await User.findAll({ attributes: { exclude: ['password'] } });
+
+        // If no users are found, return a 404 status
+        if (!users.length) return res.status(404).json({ message: 'No users found' });
+
+        // Return the list of users
+        res.json(users);
+    } catch (error) {
+        // If there's an error, return a 500 status with the error message
+        res.status(500).json({ message: 'Failed to fetch users', error: error.message });
     }
 };
 
@@ -89,14 +120,14 @@ exports.resetPassword = async (req, res) => {
 };
 
 
-exports.deleteUser = async (req, res) => {
-    try {
-        const user = await User.findByPk(req.user.id);
-        if (!user) return res.status(404).json({ message: 'User not found' });
+// exports.deleteUser = async (req, res) => {
+//     try {
+//         const user = await User.findByPk(req.user.id);
+//         if (!user) return res.status(404).json({ message: 'User not found' });
 
-        await user.destroy();
-        res.json({ message: 'User account deleted successfully' });
-    } catch (error) {
-        res.status(500).json({ message: 'Failed to delete user account', error: error.message });
-    }
-};
+//         await user.destroy();
+//         res.json({ message: 'User account deleted successfully' });
+//     } catch (error) {
+//         res.status(500).json({ message: 'Failed to delete user account', error: error.message });
+//     }
+// };
