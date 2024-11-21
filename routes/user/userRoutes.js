@@ -9,7 +9,9 @@ const courseController= require('../../controllers/admin/courseController');
 const QuestionTypecontroller = require('../../controllers/admin/questionTypecontroller');
 const mocktestController = require('../../controllers/admin/mocktestController');
 const questionController = require('../../controllers/admin/questionsController');
-const mockTestController = require('../../controllers/user/submitMockTestResult'); 
+
+const mockTestController = require('../../controllers/user/submitMockTestResult'); // Update the path based on your project structure
+const contentController = require('../../controllers/admin/contentController');
 
 const router = express.Router();
 
@@ -34,6 +36,11 @@ router.post('/reset-password', authMiddleware, userController.resetPassword);
 
 router.get('/all', userController.getAllUsers);
 
+
+
+// Conetent Routes
+router.get('/contents', contentController.getAllContent);
+router.get('/contents/:contentId', contentController.getContentById);
 
 //questions 
 router.get('/questions',questionController.getAllQuestions);
