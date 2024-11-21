@@ -44,6 +44,21 @@ exports.loginUser = async (req, res) => {
     }
 };
 
+// Logout User
+exports.logoutUser = async (req, res) => {
+    try {
+        const token = req.headers['authorization']?.split(' ')[1]; // Extract token
+        if (!token) return res.status(401).json({ message: 'No token provided' });
+
+        // Add token to blacklist
+        tokenBlacklist.push(token);
+        res.json({ message: 'Logged out successfully' });
+    } catch (error) {
+        res.status(500).json({ message: 'Failed to log out', error: error.message });
+    }
+};
+
+
 // Get User Info (Protected)
 exports.getUserInfo = async (req, res) => {
     try {
@@ -105,14 +120,14 @@ exports.resetPassword = async (req, res) => {
 };
 
 
-exports.deleteUser = async (req, res) => {
-    try {
-        const user = await User.findByPk(req.user.id);
-        if (!user) return res.status(404).json({ message: 'User not found' });
+// exports.deleteUser = async (req, res) => {
+//     try {
+//         const user = await User.findByPk(req.user.id);
+//         if (!user) return res.status(404).json({ message: 'User not found' });
 
-        await user.destroy();
-        res.json({ message: 'User account deleted successfully' });
-    } catch (error) {
-        res.status(500).json({ message: 'Failed to delete user account', error: error.message });
-    }
-};
+//         await user.destroy();
+//         res.json({ message: 'User account deleted successfully' });
+//     } catch (error) {
+//         res.status(500).json({ message: 'Failed to delete user account', error: error.message });
+//     }
+// };
