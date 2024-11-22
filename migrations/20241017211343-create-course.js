@@ -24,6 +24,9 @@ module.exports = {
       level: {
         type: Sequelize.STRING
       },
+      rating: {
+        type: Sequelize.BOOLEAN
+      },
       status:{
         type: Sequelize.BOOLEAN
       },

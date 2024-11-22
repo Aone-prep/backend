@@ -32,7 +32,8 @@ module.exports = (sequelize, DataTypes) => {
     duration: DataTypes.TIME,
     level: DataTypes.STRING,
     category_id: DataTypes.INTEGER,
-    status: DataTypes.BOOLEAN
+    status: DataTypes.BOOLEAN,
+    rating: DataTypes.FLOAT
     // user_id: DataTypes.INTEGER
   }, {
     sequelize,
