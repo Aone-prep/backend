@@ -146,7 +146,7 @@ describe('Question Controller', () => {
       await createQuestion(req, res);
 
       // Assert
-      expect(res.json).toHaveBeenCalledWith({ message: 'Question Added Successfully' });
+      expect(res.json).toHaveBeenCalledWith(question);
       expect(res.status).not.toHaveBeenCalledWith(400);
     });
 
