@@ -11,7 +11,7 @@ const mocktestController = require('../../controllers/admin/mocktestController')
 const questionController = require('../../controllers/admin/questionsController');
 const mockTestController = require('../../controllers/user/submitMockTestResult'); // Update the path based on your project structure
 const contentController = require('../../controllers/admin/contentController');
-
+const userCourseController = require('../../controllers/user/userCourseController');
 const router = express.Router();
 
 
@@ -23,7 +23,11 @@ router.post('/login', userController.loginUser);
 
 // Protected Routes (requires authentication)
 
+//
 
+
+router.get('/progress',userCourseController.incrementInProgress);
+router.post('/start',userCourseController.createUserCourse);
 
 
 // User Routes

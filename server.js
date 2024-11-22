@@ -16,7 +16,7 @@ app.use(bodyParser.json());
 // Define routes
 app.use('/user', userRoute);
 app.use('/admin', adminRoute);
-app.use('/all', allRoute)
+// app.use('/all', allRoute)
 
 // Catch-all route for unhandled requests
 app.use((req, res) => {

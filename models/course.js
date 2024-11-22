@@ -32,8 +32,6 @@ module.exports = (sequelize, DataTypes) => {
     duration: DataTypes.TIME,
     level: DataTypes.STRING,
     category_id: DataTypes.INTEGER,
-    in_progress: DataTypes.INTEGER,
-    rating: DataTypes.FLOAT,
     status: DataTypes.BOOLEAN
     // user_id: DataTypes.INTEGER
   }, {

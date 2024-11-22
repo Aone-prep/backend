@@ -24,13 +24,6 @@ module.exports = {
       level: {
         type: Sequelize.STRING
       },
-      in_progress:
-      {
-        type: Sequelize.INTEGER
-      },
-      rating:{
-        type: Sequelize.FLOAT
-      },
       status:{
         type: Sequelize.BOOLEAN
       },
