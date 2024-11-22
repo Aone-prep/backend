@@ -1,15 +1,15 @@
 const { submitMockTestResult } = require('../../controllers/user/submitMockTestResult');
-const { Question, MockTest, Result } = require('../../models');
+const { UserTest, Question, MockTest } = require('../../models');
 
 // Mock models
 jest.mock('../../models', () => ({
+  UserTest: {
+    create: jest.fn(),
+  },
   Question: {
     findAll: jest.fn(),
   },
   MockTest: {},
-  Result: {
-    create: jest.fn(),
-  },
 }));
 
 // Helper functions to create mock requests and responses
@@ -42,7 +42,7 @@ describe('submitMockTestResult Controller', () => {
     ];
 
     Question.findAll.mockResolvedValue(questions);
-    Result.create.mockResolvedValue({ id: 1 });  // Simulate result creation
+    UserTest.create.mockResolvedValue({ id: 1 });  // Simulate result creation
     const req = mockRequest({ userId: 1, mockTestId: 1, answers });
     const res = mockResponse();
 
@@ -50,19 +50,22 @@ describe('submitMockTestResult Controller', () => {
     await submitMockTestResult(req, res);
 
     // Assert
-    expect(Result.create).toHaveBeenCalledWith({
+    expect(UserTest.create).toHaveBeenCalledWith({
       description: 'Mock test result for user 1',
       obtained_mark: 2,
       pass_mark: 2,
       full_mark: 2,
       highest_mark: 2,
+      passed: true, // The user passed because they got both answers correct
+      user_id: 1,   // User ID
+      mocktest_id: 1, // Mock Test ID
     });
     expect(res.json).toHaveBeenCalledWith({
       message: 'Mock Test submitted successfully',
       totalScore: 2,
       passMark: 2,
       fullMark: 2,
-      resultId: 1,
+      userTestId: 1,
       passed: true,
     });
   });
@@ -94,7 +97,7 @@ describe('submitMockTestResult Controller', () => {
     ];
 
     Question.findAll.mockResolvedValue(questions);
-    Result.create.mockRejectedValue(new Error('Database error'));  // Simulate error in result creation
+    UserTest.create.mockRejectedValue(new Error('Database error'));  // Simulate error in result creation
     const req = mockRequest({ userId: 1, mockTestId: 1, answers });
     const res = mockResponse();
 
@@ -102,7 +105,7 @@ describe('submitMockTestResult Controller', () => {
     await submitMockTestResult(req, res);
 
     // Assert
-    expect(res.status).toHaveBeenCalledWith(404);
+    expect(res.status).toHaveBeenCalledWith(500);
     expect(res.json).toHaveBeenCalledWith({ message: 'Error submitting the test result' });
   });
 
@@ -119,7 +122,7 @@ describe('submitMockTestResult Controller', () => {
     ];
 
     Question.findAll.mockResolvedValue(questions);
-    Result.create.mockResolvedValue({ id: 1 });  // Simulate result creation
+    UserTest.create.mockResolvedValue({ id: 1 });  // Simulate result creation
     const req = mockRequest({ userId: 1, mockTestId: 1, answers });
     const res = mockResponse();
 
@@ -132,7 +135,7 @@ describe('submitMockTestResult Controller', () => {
       totalScore: 1,  // Only one correct answer
       passMark: 2,    // 60% of 2 questions (rounded up)
       fullMark: 2,
-      resultId: 1,
+      userTestId: 1,
       passed: false,  // Failed as totalScore < passMark
     });
   });
@@ -149,7 +152,7 @@ describe('submitMockTestResult Controller', () => {
     await submitMockTestResult(req, res);
 
     // Assert
-    expect(res.status).toHaveBeenCalledWith(404);
+    expect(res.status).toHaveBeenCalledWith(500);
     expect(res.json).toHaveBeenCalledWith({ message: 'Error submitting the test result' });
   });
 });
