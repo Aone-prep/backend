@@ -56,7 +56,8 @@ exports.createQuestion = async (req, res) => {
     try {
         created_by="Admin";
         const question = await Question.create({ description, optionA, optionB, optionC, optionD, answer, mock_test_id, question_type_id,status,created_by });
-        res.json({ message: 'Question Added Successfully', question });
+        res.status(201).json(question);
+        res.json({ message: 'Question Added Successfully' });
         // res.status(201).json(question);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -71,7 +72,8 @@ exports.updateQuestion = async (req, res) => {
         const question = await Question.findByPk(id);
         if (!question) return res.status(404).json({ message: 'Question not found' });
         await question.update({ description, optionA, optionB, optionC, optionD, answer, status });
-        res.json({ message: 'Question updated successfully',question });
+        res.json(question);
+        res.json({ message: 'Question updated successfully' });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

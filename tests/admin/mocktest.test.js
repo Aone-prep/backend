@@ -127,6 +127,7 @@ describe('Mock Test Controller', () => {
         duration: '60 minutes',
         max_score: 100,
         course_id: 1,
+        level: 1,
         status: 'active'
       };
       MockTest.create.mockResolvedValue(newMockTest);
