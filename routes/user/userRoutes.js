@@ -9,6 +9,7 @@ const courseController= require('../../controllers/admin/courseController');
 const QuestionTypecontroller = require('../../controllers/admin/questionTypecontroller');
 const mocktestController = require('../../controllers/admin/mocktestController');
 const questionController = require('../../controllers/admin/questionsController');
+
 const mockTestController = require('../../controllers/user/submitMockTestResult'); // Update the path based on your project structure
 const contentController = require('../../controllers/admin/contentController');
 const userCourseController = require('../../controllers/user/userCourseController');
@@ -38,9 +39,6 @@ router.post('/reset-password', authMiddleware, userController.resetPassword);
 //router.delete('/delete-account', authMiddleware, userController.deleteUser);
 
 router.get('/all', userController.getAllUsers);
-
-// Logout Route (does not require authentication)
-router.post('/logout', userController.logoutUser);
 
 
 

@@ -22,6 +22,9 @@ module.exports = (sequelize, DataTypes) => {
     highest_mark: {
       type: DataTypes.INTEGER,
     },
+    passed: {
+      type: DataTypes.BOOLEAN,
+    },
     user_id: {
       type: DataTypes.INTEGER,
       allowNull: false,

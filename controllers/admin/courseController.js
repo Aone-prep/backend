@@ -1,26 +1,39 @@
 const {CourseCategory, Course, Content } = require('../../models');
 
-// Get all courses
+// Get all courses with filters for recently added and popular by rating
 exports.getAllCourses = async (req, res) => {
-    
     try {
-        const courses = await Course.findAll(
-            {
-            include: [
-                {
-                model:CourseCategory,
-                as: 'category'
-                },
-                {
-                model: Content,
-                as: 'Contents'
-                }
-        ]
+        // Get filters from query parameters
+        const { sortBy } = req.query;
 
-    });
+        let order = [];
+
+        // Define sorting behavior
+        if (sortBy === 'recent') {
+            // Sort by creation date for recently added courses
+            order = [['createdAt', 'DESC']];
+        } else if (sortBy === 'rating') {
+            // Sort by rating for popular courses
+            order = [['rating', 'DESC']];
+        }
+
+        // Fetch courses with the defined sorting
+        const courses = await Course.findAll({
+            include: [
+                { model: CourseCategory, as: 'category' },
+                { model: Content, as: 'contents' }
+            ],
+            order
+        });
+
+        if (!courses.length) {
+            return res.status(404).json({ message: 'No courses found matching the criteria' });
+        }
+
         res.json(courses);
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        console.error(error);  // Log the error for debugging purposes
+        res.status(500).json({ message: 'An error occurred while fetching courses' });
     }
 };
 
