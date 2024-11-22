@@ -15,7 +15,7 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        user_id: 2, // Assume user with ID 2
+        user_id: 1, // Assume user with ID 2
         course_id: 2, // Assume course with ID 2
         comment: "Very challenging but rewarding.",
         progress: 50, // Progress at 50%
@@ -25,7 +25,7 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        user_id: 2, // Assume user with ID 3
+        user_id: 1, // Assume user with ID 3
         course_id: 3, // Assume course with ID 1
         comment: "Excellent content and delivery.",
         progress: 100, // Progress at 100%
