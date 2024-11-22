@@ -24,6 +24,9 @@ module.exports = {
       highest_mark: {
         type: Sequelize.INTEGER
       },
+      passed: {
+        type: Sequelize.BOOLEAN
+      },
       user_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
