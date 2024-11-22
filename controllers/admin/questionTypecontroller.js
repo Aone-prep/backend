@@ -44,7 +44,7 @@ exports.updateQuestionType = async (req, res) => {
         await QuestionType.update(
         {name, status },
         {where:{id}});
-        res.json({ message: 'Question Type updated successfully',QuestionType });
+        res.json({ message: 'Question Type updated successfully',qtype });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
