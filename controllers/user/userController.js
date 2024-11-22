@@ -44,20 +44,6 @@ exports.loginUser = async (req, res) => {
     }
 };
 
-// Logout User
-exports.logoutUser = async (req, res) => {
-    try {
-        const token = req.headers['authorization']?.split(' ')[1]; // Extract token
-        if (!token) return res.status(401).json({ message: 'No token provided' });
-
-        // Add token to blacklist
-        tokenBlacklist.push(token);
-        res.json({ message: 'Logged out successfully' });
-    } catch (error) {
-        res.status(500).json({ message: 'Failed to log out', error: error.message });
-    }
-};
-
 
 // Get User Info (Protected)
 exports.getUserInfo = async (req, res) => {
