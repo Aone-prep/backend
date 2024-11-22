@@ -57,7 +57,7 @@ exports.createQuestion = async (req, res) => {
         created_by="Admin";
         const question = await Question.create({ description, optionA, optionB, optionC, optionD, answer, mock_test_id, question_type_id,status,created_by });
         res.status(201).json(question);
-        res.json({ message: 'Question Added Successfully' });
+        // res.json({ message: 'Question Added Successfully' });
         // res.status(201).json(question);
     } catch (error) {
         res.status(500).json({ message: error.message });

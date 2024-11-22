@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const db = require('./models/index');  // Import your models
+const { exec } = require('child_process'); // For running CLI commands
 const userRoute = require('./routes/user/userRoutes');
 const adminRoute = require('./routes/admin/adminRoutes');
 
@@ -45,7 +46,40 @@ async function createDatabaseIfNotExists() {
     }
 }
 
-// Sync Database and Start Server
+// Function to check if the necessary data exists (e.g., if a user exists)
+async function checkIfSeeded() {
+    try {
+        // Check if there's any data in a table (for example, 'users')
+        const userCount = await db.User.count(); // Replace `User` with any model you want to check
+        return userCount > 0; // If the count is greater than 0, return true, meaning data is already there
+    } catch (err) {
+        console.error('Error checking if data is seeded:', err);
+        return false;
+    }
+}
+
+// Function to run Sequelize seeders programmatically
+async function runSeeders() {
+    try {
+        console.log('Running seeders...');
+        await new Promise((resolve, reject) => {
+            exec('npx sequelize-cli db:seed:all', (err, stdout, stderr) => {
+                if (err) {
+                    console.error(`Error executing seeders: ${stderr}`);
+                    reject(err);
+                } else {
+                    console.log(`Seeders executed successfully: ${stdout}`);
+                    resolve(stdout);
+                }
+            });
+        });
+    } catch (error) {
+        console.error('Error running seeders:', error);
+        throw error; // Rethrow error if seeders fail
+    }
+}
+
+// Sync Database, Run Seeders (only if needed), and Start Server
 const PORT = process.env.PORT || 3030;
 
 async function startServer() {
@@ -61,9 +95,19 @@ async function startServer() {
         await db.sequelize.authenticate();
         console.log('Database connected successfully.');
 
-        // Sync the models
+        // Sync the models (create tables if they don’t exist)
         await db.sequelize.sync();
         console.log('Database synchronized successfully.');
+
+        // Check if the necessary data exists
+        const isSeeded = await checkIfSeeded();
+
+        if (!isSeeded) {
+            // If the data doesn't exist, run the seeders
+            await runSeeders();
+        } else {
+            console.log('Data already seeded, skipping seeders.');
+        }
 
         // Start the server
         app.listen(PORT, () => {
@@ -71,7 +115,7 @@ async function startServer() {
         });
 
     } catch (err) {
-        console.error('Failed to connect to the database:', err);
+        console.error('Failed to connect to the database or run seeders:', err);
     }
 }
 
