@@ -69,7 +69,12 @@ const createUserCourse = async (req, res) => {
   if (!user_id || !course_id) {
     return res.status(400).json({ message: 'user_id and course_id are required' });
   }
+   userCourse=await UserCourse.findByPk(user_id);
+
   try {
+    if(userCourse.course_id == course_id){
+      return res.status(400).json({ message: 'user is already assigned with course' });
+    }
     const newUserCourse = await UserCourse.create({
       user_id,          // Provided by the frontend
       course_id,        // Provided by the frontend

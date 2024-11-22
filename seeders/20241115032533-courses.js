@@ -10,6 +10,7 @@ module.exports = {
         level: 'Beginner',
         category_id: 1, // Assuming this ID exists in CourseCategory
         status:0,
+        rating: 4.5,
         createdAt: new Date(),
         updatedAt: new Date(),
       },
@@ -20,6 +21,7 @@ module.exports = {
         level: 'Advanced',
         category_id: 1, // Assuming this ID exists in CourseCategory
         status:1,
+        rating: 5,
         createdAt: new Date(),
         updatedAt: new Date(),
       },
@@ -30,6 +32,7 @@ module.exports = {
         level: 'Intermediate',
         category_id: 2, // Assuming this ID exists in CourseCategory
         status:0,
+        rating: 3.5,
         createdAt: new Date(),
         updatedAt: new Date(),
       },
@@ -40,6 +43,7 @@ module.exports = {
         level: 'Intermediate',
         category_id: 3, // Assuming this ID exists in CourseCategory
         status:0,
+        rating: 2.5,
         createdAt: new Date(),
         updatedAt: new Date(),
       },
