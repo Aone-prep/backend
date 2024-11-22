@@ -4,6 +4,6 @@ COPY . .
 RUN npm install
 # RUN npm install sequelize-cli -g
 # RUN npx sequelize-cli db:migrate
-# RUN npx sequelize-cli db:seed:all
+RUN npx sequelize-cli db:seed:all
 # RUN npm run build
 CMD ["npm", "start"]
