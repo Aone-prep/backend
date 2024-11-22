@@ -4,7 +4,6 @@ const bodyParser = require('body-parser');
 const db = require('./models/index');  // Import your models
 const userRoute = require('./routes/user/userRoutes');
 const adminRoute = require('./routes/admin/adminRoutes');
-const allRoute = require('./routes/Routes');
 
 // Create an express app
 const app = express();
@@ -16,7 +15,6 @@ app.use(bodyParser.json());
 // Define routes
 app.use('/user', userRoute);
 app.use('/admin', adminRoute);
-// app.use('/all', allRoute)
 
 // Catch-all route for unhandled requests
 app.use((req, res) => {

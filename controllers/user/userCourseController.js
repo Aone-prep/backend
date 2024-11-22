@@ -1,6 +1,6 @@
 const { UserCourse, Content, Course } = require('../../models');
 
-const incrementInProgress = async (req, res) => {
+exports. incrementInProgress = async (req, res) => {
   const {course_id, direction, user_id} = req.body; // Course ID from the request body
 
   try {
@@ -62,7 +62,7 @@ const incrementInProgress = async (req, res) => {
     return res.status(500).json({ message: 'An error occurred while updating the progress' });
   }
 };
-const createUserCourse = async (req, res) => {
+exports. createUserCourse = async (req, res) => {
   const { user_id, course_id } = req.body;
 
   // Validate that user_id and course_id are provided
@@ -93,6 +93,4 @@ const createUserCourse = async (req, res) => {
     return res.status(500).json({ message: 'An error occurred while starting the course' });
   }
 };
-module.exports = {
-  incrementInProgress, createUserCourse
-};
+
