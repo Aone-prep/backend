@@ -2,27 +2,27 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Results', {
+    await queryInterface.createTable('Contents', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      description: {
+      title: {
         type: Sequelize.STRING
       },
-      obtained_mark: {
+      body: {
+        type: Sequelize.TEXT
+      },
+      courseId: {
         type: Sequelize.INTEGER
       },
-      pass_mark: {
-        type: Sequelize.INTEGER
+      type: {
+        type: Sequelize.STRING
       },
-      full_mark: {
-        type: Sequelize.INTEGER
-      },
-      highest_mark: {
-        type: Sequelize.INTEGER
+      mediaUrl: {
+        type: Sequelize.STRING
       },
       createdAt: {
         allowNull: false,
@@ -35,6 +35,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Results');
+    await queryInterface.dropTable('Contents');
   }
 };

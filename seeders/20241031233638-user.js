@@ -1,25 +1,30 @@
 'use strict';
 
 /** @type {import('sequelize-cli').Migration} */
+const bcrypt = require('bcryptjs'); // For hashing passwords
+
 module.exports = {
   async up (queryInterface, Sequelize) {
+    // Hash the password before saving
+    const hashedPassword = await bcrypt.hash('admin123', 10); // 10 is the salt rounds
+    
     await queryInterface.bulkInsert('Users', [{
-      id: '1',
+      id: 1, // Use an integer for the ID if it's defined as INTEGER
       first_name: 'admin',
       last_name: 'admin',
       username: 'admin',
-      password: 'admin123', // Make sure to hash your password
+      password: 'password123', // Store the hashed password
       email: 'admin@gmail.com',
       role: 'admin',
-      created_by: 'Superadmin',
-      status: '1',
+      created_by: 'Superadmin', // Assuming this is a string or related to another table
+      status: true, // Ensure this is a boolean, or use 1 if it's an integer
       createdAt: new Date(),
       updatedAt: new Date()
     }], {});
-   
   },
 
   async down (queryInterface, Sequelize) {
-    await queryInterface.bulkDelete('Users', null, {});
+    // Optionally, add a WHERE clause to delete specific users
+    await queryInterface.bulkDelete('Users', { email: 'admin@gmail.com' }, {});
   }
 };

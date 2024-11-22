@@ -39,9 +39,10 @@ exports.getMockTestById = async (req, res) => {
 
 // Create a new mock test
 exports.createMockTest = async (req, res) => {
-    const { name, description, duration, max_score, course_id ,status } = req.body;
+    const { name, description, duration, max_score, course_id ,status,level } = req.body;
     try {
-        const mockTest = await MockTest.create({ name, description, duration, max_score, course_id,status });
+        const mockTest = await MockTest.create({ name, description, duration, max_score, course_id,status,level });
+        res.json(mockTest);
         res.json({ message: 'Mock Test Added Successfully'});
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -51,11 +52,12 @@ exports.createMockTest = async (req, res) => {
 // Update mock test by ID
 exports.updateMockTest = async (req, res) => {
     const { id } = req.params;
-    const { name, description, duration, max_score, status } = req.body;
+    const { name, description, duration, max_score, status,level } = req.body;
     try {
         const mockTest = await MockTest.findByPk(id);
         if (!mockTest) return res.status(404).json({ message: 'Mock Test not found' });
-        await mockTest.update({ name, description, duration, max_score, status });
+        await mockTest.update({ name, description, duration, max_score, status,level });
+        res.json(mockTest);
         res.json({ message: 'Mock Test updated successfully' });
     } catch (error) {
         res.status(500).json({ message: error.message });

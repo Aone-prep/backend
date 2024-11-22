@@ -24,10 +24,13 @@ module.exports = {
       max_score: {
         type: Sequelize.INTEGER
       },
+      level:{
+        type: Sequelize.INTEGER
+      },
       course_id: {
         type: Sequelize.INTEGER,
         references: {
-          model: 'Courses', // Table name of Course
+          model: 'Courses', 
           key: 'id'
         },
         onUpdate: 'CASCADE',
