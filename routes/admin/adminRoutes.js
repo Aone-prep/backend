@@ -12,6 +12,11 @@ const contentController = require('../../controllers/admin/contentController');
 //getting token
 router.post('/login', adminController.loginAdmin);
 
+
+// UPdating user data from admin
+router.put('/update/:id', adminMiddleware, adminController.updateUser)
+router.delete('/delete/:id', adminMiddleware, adminController.deleteUser);
+
 //Content Routes 
 router.put('/contents/:contentId',adminMiddleware, contentController.updateContent);
 router.post('/contents', adminMiddleware,contentController.createContent);

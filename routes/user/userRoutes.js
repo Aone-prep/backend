@@ -32,9 +32,11 @@ router.post("/start", userCourseController.createUserCourse);
 router.get("/info", authMiddleware, userController.getUserInfo);
 router.put("/update-info", authMiddleware, userController.updateUserInfo);
 router.post("/reset-password", authMiddleware, userController.resetPassword);
-//router.delete('/delete-account', authMiddleware, userController.deleteUser);
+
 
 router.get("/all", userController.getAllUsers);
+
+
 
 // Conetent Routes
 router.get("/contents", contentController.getAllContent);
