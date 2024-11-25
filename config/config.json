@@ -1,18 +1,11 @@
 {
   "development": {
-    "username": "adminuser",
-    "password": "P@ssw0rd1234!",
+    "username": "root",
+    "password": "",
     "database": "capstone",
-    "host": "aoneprep-mysql-server.mysql.database.azure.com",
-    "dialect": "mysql",
-    "dialectOptions": {
-      "ssl": {
-        "require": true,
-        "rejectUnauthorized": false
-      }
-    }
-
-  },
+    "host": "localhost",
+    "dialect": "mysql"
+   },
   "test": {
     "username": "root",
     "password": "",

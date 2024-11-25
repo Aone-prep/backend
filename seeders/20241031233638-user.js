@@ -1,23 +1,23 @@
 'use strict';
 
 /** @type {import('sequelize-cli').Migration} */
-const bcrypt = require('bcryptjs'); // For hashing passwords
+const bcrypt = require('bcryptjs'); 
 
 module.exports = {
   async up (queryInterface, Sequelize) {
     // Hash the password before saving
-    const hashedPassword = await bcrypt.hash('admin123', 10); // 10 is the salt rounds
+    const hashedPassword = await bcrypt.hash('admin123', 10); 
     
     await queryInterface.bulkInsert('Users', [{
-      id: 1, // Use an integer for the ID if it's defined as INTEGER
+      id: 1, 
       first_name: 'admin',
       last_name: 'admin',
       username: 'admin',
-      password: 'password123', // Store the hashed password
+      password: hashedPassword, 
       email: 'admin@gmail.com',
       role: 'admin',
-      created_by: 'Superadmin', // Assuming this is a string or related to another table
-      status: true, // Ensure this is a boolean, or use 1 if it's an integer
+      created_by: 'Superadmin', 
+      status: true, 
       createdAt: new Date(),
       updatedAt: new Date()
     }], {});
