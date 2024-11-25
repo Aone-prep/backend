@@ -13,15 +13,17 @@ module.exports = {
         type: Sequelize.STRING
       },
       createdAt: {
+        type: Sequelize.DATE,
         allowNull: false,
-        type: Sequelize.DATE
+        defaultValue: Sequelize.NOW,
       },
       status: {
         type: Sequelize.BOOLEAN
       },
       updatedAt: {
+        type: Sequelize.DATE,
         allowNull: false,
-        type: Sequelize.DATE
+        defaultValue: Sequelize.NOW,
       }
     });
   },
