@@ -72,8 +72,8 @@ exports.updateQuestion = async (req, res) => {
         const question = await Question.findByPk(id);
         if (!question) return res.status(404).json({ message: 'Question not found' });
         await question.update({ description, optionA, optionB, optionC, optionD, answer, status });
-        res.json(question);
-        res.json({ message: 'Question updated successfully' });
+        res.status(201).json(question);
+        // res.json({ message: 'Question updated successfully' });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

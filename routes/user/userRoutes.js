@@ -26,7 +26,8 @@ router.post("/login", userController.loginUser);
 
 router.get("/progress", userCourseController.incrementInProgress);
 router.post("/start", userCourseController.createUserCourse);
-
+router.post("/rate", authMiddleware, userCourseController.userRating);
+// router.post("/rate", userCourseController.userRating);
 // User Routes
 
 router.get("/info", authMiddleware, userController.getUserInfo);

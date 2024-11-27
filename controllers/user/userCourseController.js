@@ -94,3 +94,43 @@ exports. createUserCourse = async (req, res) => {
   }
 };
 
+exports. userRating = async (req,res) => {
+  const { user_id, course_id, rating } = req.body;
+
+  // Input validation
+  if (!user_id || !course_id || typeof rating !== 'number' || rating < 1 || rating > 5) {
+    return res.status(400).json({
+      message: 'Invalid input. Please ensure user_id, course_id, and rating (1-5) are provided.',
+    });
+  }
+
+  try {
+    // Step 1: Check if the user has already rated the course
+    const existingRating = await UserCourse.findOne({
+      where: { user_id, course_id },
+    });
+
+    if (existingRating) {
+      // Step 2: If the user has already rated, update the rating
+      await existingRating.update({ rating });
+
+      return res.status(200).json({
+        message: 'Rating updated successfully',
+        data: existingRating,
+      });
+    } else {
+      // Step 3: If no rating exists, create a new record
+      const newRating = await UserCourse.create({ user_id, course_id, rating });
+
+      return res.status(201).json({
+        message: 'Rating saved successfully',
+        data: newRating,
+      });
+    }
+  } catch (error) {
+    console.error('Error in userRating function:', error);
+    return res.status(500).json({
+      message: 'Server error. Please try again later.',
+    });
+  }
+}
