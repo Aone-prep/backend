@@ -120,3 +120,30 @@ exports.submitMockTestResult = async (req, res) => {
         res.status(500).json({ message: 'Error submitting the test result' });
     }
 };
+
+// Get all mock tests given by a specific user
+exports.getUserTests = async (req, res) => {
+    const { userId } = req.params; // Get userId from the route parameter
+
+    try {
+        // Fetch all tests given by the user, including mock test details
+        const userTests = await UserTest.findAll({
+            where: { user_id: userId },
+            include: [
+                {
+                    model: MockTest, // Include mock test details
+                    as: 'mockTest',
+                },
+            ],
+        });
+
+        // Return the test results
+        res.json({
+            message: 'Tests fetched successfully',
+            data: userTests,
+        });
+    } catch (error) {
+        console.error(error); // Log the error for debugging purposes
+        res.status(500).json({ message: 'Error fetching the test results' });
+    }
+};
