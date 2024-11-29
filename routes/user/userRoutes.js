@@ -24,7 +24,7 @@ router.post("/login", userController.loginUser);
 
 //
 
-router.get("/progress", userCourseController.incrementInProgress);
+router.post("/progress", userCourseController.incrementInProgress);
 router.post("/start", userCourseController.createUserCourse);
 router.post("/rate", authMiddleware, userCourseController.userRating);
 // router.post("/rate", userCourseController.userRating);
@@ -34,10 +34,7 @@ router.get("/info", authMiddleware, userController.getUserInfo);
 router.put("/update-info", authMiddleware, userController.updateUserInfo);
 router.post("/reset-password", authMiddleware, userController.resetPassword);
 
-
 router.get("/all", userController.getAllUsers);
-
-
 
 // Conetent Routes
 router.get("/contents", contentController.getAllContent);
@@ -62,7 +59,6 @@ router.get("/categories/:id", courseCategoryController.getCourseCategoryById);
 //course
 router.get("/courses", courseController.getAllCourses);
 router.get("/courses/:id", courseController.getCourseById);
-
 
 // Route to get all courses for a specific user by user_id
 router.get("/:id/courses", authMiddleware, userCourseController.getUserCourses);
