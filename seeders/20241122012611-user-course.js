@@ -25,8 +25,8 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        user_id: 2, // Assume user with ID 3
-        course_id: 3, // Assume course with ID 1
+        user_id: 1, 
+        course_id: 3,
         comment: "Excellent content and delivery.",
         progress: 100, 
         rating: 5, 
