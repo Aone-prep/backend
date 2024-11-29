@@ -72,21 +72,25 @@ exports. createUserCourse = async (req, res) => {
    userCourse=await UserCourse.findByPk(user_id);
 
   try {
+    if(userCourse){
     if(userCourse.course_id == course_id){
       return res.status(400).json({ message: 'user is already assigned with course' });
     }
+  }
     const newUserCourse = await UserCourse.create({
-      user_id,          // Provided by the frontend
-      course_id,        // Provided by the frontend
-      comment: null,    // Default value
-      progress: 1,      // Default value
-      rating: 1,        // Default value
-      status: 'not_completed',  // Default value
+      user_id,          
+      course_id,        
+      comment: null,    
+      progress: 1,      
+      rating: 1,        
+      status: 'not_completed',  
     });
+    const userCourseDetails = await Course.findOne({
+      where: { id: course_id }});
 
     return res.status(201).json({
       message: 'Course started successfully',
-      data: newUserCourse,
+      data: userCourseDetails,
     });
   } catch (error) {
     console.error(error);
@@ -116,7 +120,7 @@ exports. userRating = async (req,res) => {
 
       return res.status(200).json({
         message: 'Rating updated successfully',
-        data: existingRating,
+        usercourse: existingRating,
       });
     } else {
       // Step 3: If no rating exists, create a new record
