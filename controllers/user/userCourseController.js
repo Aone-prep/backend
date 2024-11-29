@@ -69,7 +69,8 @@ exports. createUserCourse = async (req, res) => {
   if (!user_id || !course_id) {
     return res.status(400).json({ message: 'user_id and course_id are required' });
   }
-   userCourse=await UserCourse.findByPk(user_id);
+   userCourse=await UserCourse.findOne(
+    {where:{user_id:user_id}});
 
   try {
     if(userCourse){
@@ -83,10 +84,10 @@ exports. createUserCourse = async (req, res) => {
       comment: null,    
       progress: 1,      
       rating: 1,        
-      status: 'not_completed',  
+      status: 'in_progess',  
     });
     const userCourseDetails = await Course.findOne({
-      where: { id: course_id }});
+      where: { id: newUserCourse.course_id }});
 
     return res.status(201).json({
       message: 'Course started successfully',
