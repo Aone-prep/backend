@@ -137,11 +137,6 @@ exports.getUserTests = async (req, res) => {
             ],
         });
 
-        // If no tests are found for the user, return a 404 status
-        if (!userTests.length) {
-            return res.status(404).json({ message: 'No tests found for this user' });
-        }
-
         // Return the test results
         res.json({
             message: 'Tests fetched successfully',

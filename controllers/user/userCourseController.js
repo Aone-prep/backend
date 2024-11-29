@@ -163,10 +163,6 @@ exports.getUserCourses = async (req, res) => {
       ],
     });
 
-    if (userCourses.length === 0) {
-      return res.status(404).json({ message: 'No courses found for this user' });
-    }
-
     return res.status(200).json({
       message: 'User courses retrieved successfully',
       data: userCourses, // Send the user courses data with associated courses
