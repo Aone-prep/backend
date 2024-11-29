@@ -84,7 +84,7 @@ exports. createUserCourse = async (req, res) => {
       comment: null,    
       progress: 1,      
       rating: 1,        
-      status: 'not_completed',  
+      status: 'in_progess',  
     });
     const userCourseDetails = await Course.findOne({
       where: { id: newUserCourse.course_id }});

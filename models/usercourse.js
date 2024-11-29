@@ -31,8 +31,8 @@ module.exports = (sequelize, DataTypes) => {
       },
       status: {
         type: DataTypes.ENUM,
-        values: ["in_progress", "completed", "not_started"],
-        defaultValue: "not_started",
+        values: ["in_progress", "completed",],
+        defaultValue: "in_progress",
       },
       user_id: {
         type: DataTypes.INTEGER,
