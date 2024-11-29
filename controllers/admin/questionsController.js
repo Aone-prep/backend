@@ -14,9 +14,11 @@ exports.getAllQuestions = async (req, res) => {
                         model: QuestionType,
                         as: 'questionType'  // Ensure the alias is correct
                     }
+                ],
+                order: [
+                    ['id', 'DESC']  // Order by createdAt field in descending order
                 ]
-        }
-        );
+        });
         res.json(questions);
     } catch (error) {
         res.status(500).json({ message: error.message });
