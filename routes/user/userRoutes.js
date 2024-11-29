@@ -24,15 +24,15 @@ router.post("/login", userController.loginUser);
 
 //
 
-router.get("/progress", userCourseController.incrementInProgress);
+router.post("/progress", userCourseController.incrementInProgress);
 router.post("/start", userCourseController.createUserCourse);
-
+router.post("/rate", authMiddleware, userCourseController.userRating);
+// router.post("/rate", userCourseController.userRating);
 // User Routes
 
 router.get("/info", authMiddleware, userController.getUserInfo);
 router.put("/update-info", authMiddleware, userController.updateUserInfo);
 router.post("/reset-password", authMiddleware, userController.resetPassword);
-//router.delete('/delete-account', authMiddleware, userController.deleteUser);
 
 router.get("/all", userController.getAllUsers);
 
@@ -59,6 +59,12 @@ router.get("/categories/:id", courseCategoryController.getCourseCategoryById);
 //course
 router.get("/courses", courseController.getAllCourses);
 router.get("/courses/:id", courseController.getCourseById);
+
+// Route to get all courses for a specific user by user_id
+router.get("/:id/courses", authMiddleware, userCourseController.getUserCourses);
+
+// Get all tests submitted by a specific user (Protected Route)
+router.get("/:userId/tests", authMiddleware, mockTestController.getUserTests);
 
 // Submit the result for a mock test (POST route)
 router.post("/submit", authMiddleware, mockTestController.submitMockTestResult);

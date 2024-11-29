@@ -32,23 +32,23 @@ module.exports = {
       },
       category_id: {
         type: Sequelize.INTEGER,
-        allowNull: false, // Make sure this is required
+        allowNull: false, 
         references: {
-          model: 'CourseCategories', // Name of the table you're referencing
-          key: 'id' // The key in the CourseCategory table
+          model: 'CourseCategories', 
+          key: 'id' 
         },
-        onDelete: 'CASCADE' // Optional: Define behavior on delete
+        onDelete: 'CASCADE' 
       },
     
       createdAt: {
-        allowNull: false,
         type: Sequelize.DATE,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
+        allowNull: false,
+        defaultValue: Sequelize.NOW,
       },
       updatedAt: {
-        allowNull: false,
         type: Sequelize.DATE,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
+        allowNull: false,
+        defaultValue: Sequelize.NOW,
       }
     });
   },

@@ -30,6 +30,7 @@ exports.registerUser = async (req, res) => {
       username,
       email,
       password: hashedPassword,
+      created_by: "user",
       role: "user",
       status: "1",
     });
@@ -196,14 +197,4 @@ exports.resetPassword = async (req, res) => {
   }
 };
 
-// exports.deleteUser = async (req, res) => {
-//     try {
-//         const user = await User.findByPk(req.user.id);
-//         if (!user) return res.status(404).json({ message: 'User not found' });
 
-//         await user.destroy();
-//         res.json({ message: 'User account deleted successfully' });
-//     } catch (error) {
-//         res.status(500).json({ message: 'Failed to delete user account', error: error.message });
-//     }
-// };
