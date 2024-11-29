@@ -35,13 +35,33 @@ jobs:
       - name: Verify Docker Hub login
         run: docker info
 
-      - name: Build and push Docker image
+      - name: Build Docker image
         id: docker_build
         uses: docker/build-push-action@v2
         with:
           context: .
-          push: true
+          push: false  # Don't push yet, we'll scan first
           tags: ${{ env.DOCKER_IMAGE }}:${{ env.DOCKER_TAG }}
+          load: true   # Load the image locally for scanning
+
+      - name: Scan local image for vulnerabilities
+        continue-on-error: true  # Continue even if vulnerabilities are found
+        run: |
+          # Install Trivy
+          curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin v0.18.3
+          # Scan the local image
+          trivy image --exit-code 1 --severity HIGH,CRITICAL ${{ env.DOCKER_IMAGE }}:${{ env.DOCKER_TAG }}
+
+      - name: Push Docker image
+        if: success() || failure()  # Push even if scan finds vulnerabilities
+        run: |
+          docker push ${{ env.DOCKER_IMAGE }}:${{ env.DOCKER_TAG }}
+
+      - name: Scan Docker Hub image
+        continue-on-error: true
+        run: |
+          # Scan the pushed image
+          trivy image --exit-code 0 --security-checks vuln ${{ env.DOCKER_IMAGE }}:${{ env.DOCKER_TAG }}
 
       - name: Output image digest
         run: 'echo "Image Digest: ${{ steps.docker_build.outputs.digest }}"'
