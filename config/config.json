@@ -5,8 +5,7 @@
     "database": "capstone",
     "host": "localhost",
     "dialect": "mysql"
-
-  },
+   },
   "test": {
     "username": "root",
     "password": "",
