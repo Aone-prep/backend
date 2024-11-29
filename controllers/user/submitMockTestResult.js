@@ -121,40 +121,34 @@ exports.submitMockTestResult = async (req, res) => {
     }
 };
 
-// // Get all mock tests given by a specific user
-// exports.getUserTests = async (req, res) => {
-//     const { userId } = req.params; // Get userId from the route parameter
+// Get all mock tests given by a specific user
+exports.getUserTests = async (req, res) => {
+    const { userId } = req.params; // Get userId from the route parameter
 
-//     try {
-//         // Fetch all tests given by the user, including mock test details
-//         const userTests = await UserTest.findAll({
-//             where: { user_id: userId },
-//             include: [
-//                 {
-//                     model: MockTest, // Include mock test details
-//                     as: 'mockTest',
-//                     attributes: ['id', 'name', 'description'], // Include mock test name and description
-//                 },
-//                 {
-//                     model: User, // Include user details
-//                     as: 'user',
-//                     attributes: ['id', 'username', 'email'], // User details, excluding password
-//                 },
-//             ],
-//         });
+    try {
+        // Fetch all tests given by the user, including mock test details
+        const userTests = await UserTest.findAll({
+            where: { user_id: userId },
+            include: [
+                {
+                    model: MockTest, // Include mock test details
+                    as: 'mockTest',
+                },
+            ],
+        });
 
-//         // If no tests are found for the user, return a 404 status
-//         if (!userTests.length) {
-//             return res.status(404).json({ message: 'No tests found for this user' });
-//         }
+        // If no tests are found for the user, return a 404 status
+        if (!userTests.length) {
+            return res.status(404).json({ message: 'No tests found for this user' });
+        }
 
-//         // Return the test results
-//         res.json({
-//             message: 'Tests fetched successfully',
-//             data: userTests,
-//         });
-//     } catch (error) {
-//         console.error(error); // Log the error for debugging purposes
-//         res.status(500).json({ message: 'Error fetching the test results' });
-//     }
-// };
+        // Return the test results
+        res.json({
+            message: 'Tests fetched successfully',
+            data: userTests,
+        });
+    } catch (error) {
+        console.error(error); // Log the error for debugging purposes
+        res.status(500).json({ message: 'Error fetching the test results' });
+    }
+};
