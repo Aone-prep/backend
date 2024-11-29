@@ -63,6 +63,13 @@ router.get("/categories/:id", courseCategoryController.getCourseCategoryById);
 router.get("/courses", courseController.getAllCourses);
 router.get("/courses/:id", courseController.getCourseById);
 
+
+// Route to get all courses for a specific user by user_id
+router.get("/:id/courses", authMiddleware, userCourseController.getUserCourses);
+
+// Get all tests submitted by a specific user (Protected Route)
+//router.get('/:userId/tests', authMiddleware, userTestController.getUserTests);
+
 // Submit the result for a mock test (POST route)
 router.post("/submit", authMiddleware, mockTestController.submitMockTestResult);
 

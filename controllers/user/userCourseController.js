@@ -139,3 +139,41 @@ exports. userRating = async (req,res) => {
     });
   }
 }
+
+// In userCourseController.js
+
+exports.getUserCourses = async (req, res) => {
+  const { id } = req.params; // Get user_id from the request parameters
+  
+  try {
+    // Find all UserCourse records associated with the user
+    const userCourses = await UserCourse.findAll({
+      where: { user_id: id }, // Filter by user_id
+      include: [
+        {
+          model: Course,  // Include related course information
+          as: "course",
+          include: [
+            {
+              model: Content,
+              as: "contents",
+            },
+          ],
+        },
+      ],
+    });
+
+    if (userCourses.length === 0) {
+      return res.status(404).json({ message: 'No courses found for this user' });
+    }
+
+    return res.status(200).json({
+      message: 'User courses retrieved successfully',
+      data: userCourses, // Send the user courses data with associated courses
+    });
+  } catch (error) {
+    console.error('Error fetching user courses:', error);
+    return res.status(500).json({ message: 'Failed to fetch user courses', error: error.message });
+  }
+};
+
