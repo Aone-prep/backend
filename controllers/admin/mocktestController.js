@@ -37,6 +37,29 @@ exports.getMockTestById = async (req, res) => {
     }
 };
 
+
+// Get mock tests by Course ID
+exports.getMockTestsByCourseId = async (req, res) => {
+    const { courseId } = req.params; // Extract course ID from the request parameters
+    try {
+        const mockTests = await MockTest.findAll({
+            where: { course_id: courseId }, // Filter by course_id
+            include: [{
+                model: Course,
+                as: 'course'
+            }]
+        });
+
+        if (!mockTests.length) {
+            return res.status(404).json({ message: 'No mock tests found for the specified course ID' });
+        }
+
+        res.json(mockTests); // Respond with the list of mock tests
+    } catch (error) {
+        res.status(500).json({ message: error.message }); // Handle errors
+    }
+};
+
 // Create a new mock test
 exports.createMockTest = async (req, res) => {
     const { name, description, duration, max_score, course_id ,status,level } = req.body;

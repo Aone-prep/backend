@@ -47,6 +47,8 @@ router.get("/questions/:id", questionController.getQuestionById);
 //mocktest
 router.get("/mocktests", mocktestController.getAllMockTests);
 router.get("/mocktests/:id", mocktestController.getMockTestById);
+//mocktest by courseID
+router.get('/course/:courseId/mocktests', mocktestController.getMockTestsByCourseId);
 
 //questionTypes
 router.get("/questionType", QuestionTypecontroller.getAllQuestionType);
